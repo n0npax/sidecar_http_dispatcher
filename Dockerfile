@@ -7,5 +7,4 @@ WORKDIR /app
 COPY pyproject.toml .
 RUN poetry install
 COPY . .
-RUN python app.py
-ENTRYPOINT ./app.py
+ENTRYPOINT poetry shell && ./app.py
