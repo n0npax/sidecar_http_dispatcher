@@ -18,9 +18,9 @@ jobs:
       - name: Generate coverage report
         run: |
           pip install poetry
+          poetry env use system
           poetry install
-          poetry shell
-          pytest --cov=./ --cov-report=xml
+          poetry run pytest -vs --cov-report=xml --cov=./ .
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
