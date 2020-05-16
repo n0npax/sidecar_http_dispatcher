@@ -11,6 +11,7 @@ quart = "^0.11.5"
 aiohttp = "^3.6.2"
 cchardet = "^2.1.6"
 pyyaml = "^5.3.1"
+pytest-asyncio = "^0.12.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.4.2"

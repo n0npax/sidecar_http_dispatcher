@@ -36,7 +36,7 @@ config = Config()
 
 
 @app.route("/", methods=("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"))
-async def hello():
+async def dispatch_and_pass():
     new_headers, destination = {}, config.destination
     matched_header = request.headers.get(config.key)
     if matched_header in config.rewrites:
