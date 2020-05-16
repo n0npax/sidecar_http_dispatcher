@@ -1,0 +1,29 @@
+{
+    "python.formatting.blackArgs": [
+        "--line-length",
+        "120"
+    ],
+    "python.sortImports.args": [
+        "-rc",
+        "--atomic"
+    ],
+    "python.formatting.autopep8Path": "black",
+    "git.autofetch": true,
+    "python.jediEnabled": false,
+    "terminal.explorerKind": "external",
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.formatOnType": true,
+    "files.trimTrailingWhitespace": true,
+    "files.trimFinalNewlines": true,
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "python.analysis.logLevel": "Warning",
+    "python.analysis.cachingLevel": "None",
+    "python.linting.banditEnabled": true,
+    "code-runner.clearPreviousOutput": true,
+    "python.testing.pytestArgs": [
+        "tests"
+    ]
+}
