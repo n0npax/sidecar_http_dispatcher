@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 import yaml
-import requests
 import sys
 import logging
+import aiohttp
 from quart import Quart, request, Response
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
-app_name = "sidecar http dispatcher"
-logger = logging.getLogger(app_name)
+APP_NAME = "sidecar http dispatcher"
+logger = logging.getLogger(APP_NAME)
 
 app = Quart(__name__)
 CONFIG_FILE = "config.yaml"
@@ -46,11 +46,17 @@ async def hello():
             new_headers[rule["key"]] = rule["val"]
         destination = rules.get(destination, destination)
     request.headers.update(new_headers)
-    # cannot use **request. type(Quart.request) != (restests.restuest)
-    resp = requests.request(
-        request.method, destination, headers=request.headers, cookies=request.cookies
-    )
-    return Response(response=resp)
+    return await pass_request(destination=destination, request=request)
+
+
+async def pass_request(*, destination, request):
+    # cannot use **request. type(Quart.request) != type(session.request)
+    async with aiohttp.ClientSession() as session:
+        async with session.request(
+            request.method, destination, headers=request.headers
+        ) as response:
+            resp_text, resp_status = await response.text(), response.status
+    return Response(resp_text, status=resp_status)
 
 
 def main():

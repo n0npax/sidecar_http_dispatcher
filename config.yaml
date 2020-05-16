@@ -1,14 +1,14 @@
 rewrites:
   dev:
     patch:
-      - key: Host_1
+      - key: Host1a
         val: development
       - key: dispatched
         val: true
     destination: https://example.com
   qa:
     patch:
-      - key: Host_1
+      - key: Host1a
         val: qa
       - key: dispatched
         val: true

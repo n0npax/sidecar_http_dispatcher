@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "sidecar_dispatcher_by_header_poc"
+name = "sidecar_http_dispatcher"
 version = "0.0.1"
 description = "POC of sidecar to pass traffic to other host base on custom header"
 authors = ["Marcin Niemira <marcin.niemira@gmail.com>"]
@@ -9,6 +9,8 @@ license = "MIT"
 python = "^3.8"
 quart = "^0.11.5"
 pyyaml = "^5.3.1"
+aiohttp = "^3.6.2"
+cchardet = "^2.1.6"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.4.2"
