@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "sidecar_dispatcher_by_header_poc"
+version = "0.0.1"
+description = "POC of sidecar to pass traffic to other host base on custom header"
+authors = ["Marcin Niemira <marcin.niemira@gmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+quart = "^0.11.5"
+pyyaml = "^5.3.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.4.2"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
