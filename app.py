@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-import yaml
-import sys
 import logging
+import sys
+
 import aiohttp
-from quart import Quart, request, Response
+import yaml
+from quart import Quart, Response, request
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 APP_NAME = "sidecar http dispatcher"

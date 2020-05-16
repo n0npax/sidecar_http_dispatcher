@@ -1,7 +1,8 @@
 import asyncio
+from dataclasses import dataclass
+
 import pytest
 
-from dataclasses import dataclass
 from app import pass_request
 
 
