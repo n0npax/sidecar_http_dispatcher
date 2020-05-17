@@ -26,5 +26,4 @@ jobs:
           kubectl get svc acme-enricher
           CLUSTER_IP=$(kubectl get svc acme-enricher -ojson | jq '.spec.clusterIP' | tr -d '"')
           SVC_PORT=$(kubectl get svc acme-enricher -ojson | jq '.spec.ports[0].nodePort')
-          curl -m5 -v http://example.com
-          curl -m5 -v http://${CLUSTER_IP}:${SVC_PORT}/ -H 'Host: example.com' -H 'environment1: qa'
+          curl -m15 -v http://${CLUSTER_IP}:${SVC_PORT}/ -H 'Host: example.com' -H 'environment1: qa'

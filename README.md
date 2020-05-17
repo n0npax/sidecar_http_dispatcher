@@ -27,8 +27,8 @@ Using [Ambassador pattern](https://docs.microsoft.com/en-us/azure/architecture/p
 assuming [example](./example) was deployed to `kubernetes` using minikube
 
 ```bash
-$ kubectl create cm nginx-conf --from-file example/configs/nginx.conf
-$ kubectl apply -f example/deployment.yaml
+kubectl create cm nginx-conf --from-file example/configs/nginx.conf
+kubectl apply -f example/deployment.yaml
 ```
 
 and the pod `acme-enricher-6d9c4bd5b-fhld7` was created
@@ -50,18 +50,18 @@ minikube service acme-enricher
 
 An http request to exposed service was made
 ```bash
-$ curl -H 'environment: qa' http://192.168.39.206:30314/
+curl -H 'environment: qa' http://192.168.39.206:30314/
 ```
 
 Request will hit `acme-enricher` which will redirect traffic to `acme-properiatery-software` in pod using `localhost:5000`.
 ```bash
-$ kubectl exec -it acme-enricher-6d9c4bd5b-fhld7  -c acme-properiatery-software -- tail -f /var/log/nginx/access.log
+kubectl exec -it acme-enricher-6d9c4bd5b-fhld7  -c acme-properiatery-software -- tail -f /var/log/nginx/access.log
 remote_addr:172.17.0.1  time_local:17/May/2020:04:39:43 +0000   method:GET      uri:/   host:192.168.39.206     status:404      bytes_sent:345  referer:- seragent:curl/7.65.3   forwardedfor:-  request_time:0.382
 ```
 
 Sidecar will patch request and make a call as `mitm`
 ```bash
-$ kubectl logs acme-enricher-6d9c4bd5b-fhld7 -c sidecar-http-dispatcher -f
+kubectl logs acme-enricher-6d9c4bd5b-fhld7 -c sidecar-http-dispatcher -f
 Running on http://127.0.0.1:5000 (CTRL + C to quit)
 INFO:quart.serving:Running on 127.0.0.1:5000 over http (CTRL + C to quit)
 [2020-05-17 04:25:56,258] Running on 127.0.0.1:5000 over http (CTRL + C to quit)
@@ -74,7 +74,7 @@ INFO:sidecar http dispatcher:patching headers: [{'key': 'Host1a', 'val': 'qa'}, 
 
 And as we can see, dispatched request was made to final destination
 ```bash
-$ sudo tcpdump -i wlp3s0 -nn -s0 -v port 80
+sudo tcpdump -i wlp3s0 -nn -s0 -v port 80
 14:27:25.260330 IP (tos 0x0, ttl 62, id 53987, offset 0, flags [DF], proto TCP (6), length 60)
     192.168.1.24.59238 > 93.184.216.34.80: Flags [S], cksum 0xbe47 (correct), seq 2664131577, win 64240, options [mss 1460,sackOK,TS val 1591297495 ecr 0,nop,wscale 7], length 0
 14:27:25.426356 IP (tos 0x0, ttl 56, id 26241, offset 0, flags [none], proto TCP (6), length 60)
@@ -101,7 +101,7 @@ $ sudo tcpdump -i wlp3s0 -nn -s0 -v port 80
 
 And as you can see IP for final destination in logs matches expected one:
 ```bash
-$ ping example.com -c1
+ping example.com -c1
 PING example.com (93.184.216.34) 56(84) bytes of data.
 64 bytes from 93.184.216.34 (93.184.216.34): icmp_seq=1 ttl=57 time=165 ms
 
