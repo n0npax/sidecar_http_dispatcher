@@ -1,8 +1,8 @@
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![codecov](https://codecov.io/gh/n0npax/sidecar_http_dispatcher/branch/master/graph/badge.svg)](https://codecov.io/gh/n0npax/sidecar_http_dispatcher)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/53d6eff77df249bca3e46992c48ba363)](https://www.codacy.com/manual/n0npax/sidecar_http_dispatcher?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=n0npax/sidecar_http_dispatcher&amp;utm_campaign=Badge_Grade)
 ![CodeCov](https://github.com/n0npax/sidecar_http_dispatcher/workflows/CodeCov/badge.svg)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/397fd620bb8845d4b70fc744d3fa9761)](https://app.codacy.com/manual/n0npax/sidecar_http_dispatcher?utm_source=github.com&utm_medium=referral&utm_content=n0npax/sidecar_http_dispatcher&utm_campaign=Badge_Grade_Settings)
 ![Docker Image](https://github.com/n0npax/sidecar_http_dispatcher/workflows/Docker%20Image/badge.svg)
 
 # sidecar http dispatcher
