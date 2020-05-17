@@ -3,8 +3,6 @@ name: Docker Image
 on:
   push:
     branches: [master]
-  pull_request:
-    branches: [master]
 
 jobs:
   build:
@@ -12,5 +10,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag sidecar_http_dispatcher:$(cat pyproject.toml | grep version | awk '{print $3}' | tr -d '"')
+      - name: Docker image
+        run: |
+          USERNAME=n0npax
+          VERSION=$(cat pyproject.toml | grep version | awk '{print $3}' | tr -d '"')
+          docker build . --tag ${USERNAME}/sidecar_http_dispatcher:${VERSION}
+          docker login --username ${USERNAME} -p ${{ secrets.DOCKER_TOKEN }}
+          docker push ${USERNAME}/sidecar_http_dispatcher:${VERSION}

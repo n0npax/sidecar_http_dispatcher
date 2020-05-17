@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import logging
 import sys
-
+import os
 import aiohttp
 import yaml
 from quart import Quart, Response, request
@@ -11,7 +11,7 @@ APP_NAME = "sidecar http dispatcher"
 logger = logging.getLogger(APP_NAME)
 
 app = Quart(__name__)
-CONFIG_FILE = "config.yaml"
+CONFIG_FILE = os.environ.get("APP_CONFIG", "config.yaml")
 
 
 def read_config():
