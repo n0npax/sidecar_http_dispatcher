@@ -5,6 +5,8 @@ RUN pip install --upgrade pip
 RUN pip install poetry
 WORKDIR /app
 COPY pyproject.toml .
-RUN poetry install
+RUN poetry env use system
+RUN poetry config virtualenvs.create false --local
+RUN poetry install --no-dev
 COPY . .
-ENTRYPOINT poetry shell && ./app.py
+ENTRYPOINT ./app.py

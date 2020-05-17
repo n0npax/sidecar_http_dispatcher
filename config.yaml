@@ -5,13 +5,13 @@ rewrites:
         val: development
       - key: dispatched
         val: true
-    destination: https://example.com
+    destination: http://example.com
   qa:
     patch:
       - key: Host1a
         val: qa
       - key: dispatched
         val: true
-    destination: https://example.com
+    destination: http://example.com
 key: environment
-destination: https://example.com
+destination: http://example.com/default

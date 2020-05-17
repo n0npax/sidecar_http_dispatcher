@@ -1,3 +1,6 @@
 Dockerfile
 **.pyc.git
 __pycache__
+example/**
+README.md
+Makefile
