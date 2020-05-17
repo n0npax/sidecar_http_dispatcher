@@ -20,6 +20,8 @@ Using [Ambassador pattern](https://docs.microsoft.com/en-us/azure/architecture/p
 
 [Talk is cheap show me the code](./app.py)
 
+![flow](img/flow.png)
+
 ## Example
 
 assuming [example](./example) was deployed to `kubernetes` using minikube
@@ -28,7 +30,7 @@ assuming [example](./example) was deployed to `kubernetes` using minikube
 make deploy
 ```
 
-and there a pod `acme-enricher-6d9c4bd5b-fhld7` wa created
+and the pod `acme-enricher-6d9c4bd5b-fhld7` was created
 ```bash
 $kubectl get po
 NAME                            READY   STATUS    RESTARTS   AGE
@@ -56,7 +58,7 @@ $ kubectl exec -it acme-enricher-6d9c4bd5b-fhld7  -c acme-properiatery-software 
 remote_addr:172.17.0.1  time_local:17/May/2020:04:39:43 +0000   method:GET      uri:/   host:192.168.39.206     status:404      bytes_sent:345  referer:- seragent:curl/7.65.3   forwardedfor:-  request_time:0.382
 ```
 
-Sidecar will patch request headers and destination host and make a call as `mitm`
+Sidecar will patch request and make a call as `mitm`
 ```bash
 $ kubectl logs acme-enricher-6d9c4bd5b-fhld7 -c sidecar-http-dispatcher -f
 Running on http://127.0.0.1:5000 (CTRL + C to quit)
