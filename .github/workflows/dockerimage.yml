@@ -17,3 +17,14 @@ jobs:
           docker build . --tag ${USERNAME}/sidecar_http_dispatcher:${VERSION}
           docker login --username ${USERNAME} -p ${{ secrets.DOCKER_TOKEN }}
           docker push ${USERNAME}/sidecar_http_dispatcher:${VERSION}
+      - uses: helm/kind-action@v1.0.0-rc.1
+      - name: Create k8s Kind Cluster
+        run: |
+          set -x
+          kubectl create cm nginx-conf --from-file example/configs/nginx.conf
+          kubectl apply -f example/deployment.yaml
+          kubectl get svc acme-enricher
+          CLUSTER_IP=$(kubectl get svc acme-enricher -ojson | jq '.spec.clusterIP' | tr -d '"')
+          SVC_PORT=$(kubectl get svc acme-enricher -ojson | jq '.spec.ports[0].nodePort')
+          curl -v http://example.com
+          curl http://${CLUSTER_IP}:${SVC_PORT}/ -H 'Host: example.com' -H 'environment1: qa'

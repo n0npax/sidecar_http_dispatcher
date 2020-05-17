@@ -27,7 +27,8 @@ Using [Ambassador pattern](https://docs.microsoft.com/en-us/azure/architecture/p
 assuming [example](./example) was deployed to `kubernetes` using minikube
 
 ```bash
-make deploy
+$ kubectl create cm nginx-conf --from-file example/configs/nginx.conf
+$ kubectl apply -f example/deployment.yaml
 ```
 
 and the pod `acme-enricher-6d9c4bd5b-fhld7` was created
@@ -109,5 +110,5 @@ PING example.com (93.184.216.34) 56(84) bytes of data.
 rtt min/avg/max/mdev = 164.694/164.694/164.694/0.000 ms
 ```
 
-## TODO
-check [todo list](TODO.md)
+## TODO - project board
+check [todo list](https://github.com/n0npax/sidecar_http_dispatcher/projects)

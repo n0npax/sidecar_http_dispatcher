@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 import logging
-import sys
 import os
+import sys
+
 import aiohttp
 import yaml
 from quart import Quart, Response, request
