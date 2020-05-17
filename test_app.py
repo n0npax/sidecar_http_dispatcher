@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 import pytest
 
-from app import pass_request
+from app import Config, config, pass_request, read_config
 
 
 @pytest.fixture
@@ -32,3 +32,17 @@ async def test_pass_request(method, destination):
         request=dummy_request_factory(method), destination=destination
     )
     assert 200 <= resp.status_code < 500
+
+
+def test_read_config():
+    config_dict = read_config()
+    assert config_dict
+    assert isinstance(config_dict, dict)
+
+
+def test_config_object():
+    assert config
+    assert isinstance(config, Config)
+    config_dict = read_config()
+    for key, value in config_dict.items():
+        assert getattr(config, key) == value

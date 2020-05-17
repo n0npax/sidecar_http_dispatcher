@@ -29,4 +29,4 @@ jobs:
           ENDPOINT=$(minikube service acme-enricher --url=true)
           sleep 120
           kubectl wait --for=condition=available --timeout=120s deployment/acme-enricher
-          curl -m150 -v ${ENDPOINT} -H 'Host: example.com' -H 'environment1: qa'
+          curl -m 5 -v ${ENDPOINT} -H 'Host: example.com' -H 'environment1: qa'
