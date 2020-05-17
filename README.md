@@ -1,6 +1,7 @@
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![codecov](https://codecov.io/gh/n0npax/sidecar_http_dispatcher/branch/master/graph/badge.svg)](https://codecov.io/gh/n0npax/sidecar_http_dispatcher)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/53d6eff77df249bca3e46992c48ba363)](https://www.codacy.com/manual/n0npax/sidecar_http_dispatcher?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=n0npax/sidecar_http_dispatcher&amp;utm_campaign=Badge_Grade)
 ![CodeCov](https://github.com/n0npax/sidecar_http_dispatcher/workflows/CodeCov/badge.svg)
 ![Docker Image](https://github.com/n0npax/sidecar_http_dispatcher/workflows/Docker%20Image/badge.svg)
 
@@ -12,7 +13,6 @@ Easy dispatcher which may mitigate properiatery/legacy software limitations
 
 You are using traffic enricher developed by `acme corp` which is very expensive it doesn't support any dispatching.
 You can  deploy new copy per env/endpoint, but it cost too much. You can also use `sidecar http dispatcher` to provide missing functionality next to rooten component.
-
 
 ## How
 
@@ -27,7 +27,8 @@ Using [Ambassador pattern](https://docs.microsoft.com/en-us/azure/architecture/p
 assuming [example](./example) was deployed to `kubernetes` using minikube
 
 ```bash
-make deploy
+$ kubectl create cm nginx-conf --from-file example/configs/nginx.conf
+$ kubectl apply -f example/deployment.yaml
 ```
 
 and the pod `acme-enricher-6d9c4bd5b-fhld7` was created
@@ -72,7 +73,7 @@ INFO:sidecar http dispatcher:patching headers: [{'key': 'Host1a', 'val': 'qa'}, 
 ```
 
 And as we can see, dispatched request was made to final destination
-```
+```bash
 $ sudo tcpdump -i wlp3s0 -nn -s0 -v port 80
 14:27:25.260330 IP (tos 0x0, ttl 62, id 53987, offset 0, flags [DF], proto TCP (6), length 60)
     192.168.1.24.59238 > 93.184.216.34.80: Flags [S], cksum 0xbe47 (correct), seq 2664131577, win 64240, options [mss 1460,sackOK,TS val 1591297495 ecr 0,nop,wscale 7], length 0
@@ -109,5 +110,5 @@ PING example.com (93.184.216.34) 56(84) bytes of data.
 rtt min/avg/max/mdev = 164.694/164.694/164.694/0.000 ms
 ```
 
-## TODO
-check [todo list](TODO.md)
+## TODO - project board
+check [todo list](https://github.com/n0npax/sidecar_http_dispatcher/projects)
