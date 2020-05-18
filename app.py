@@ -62,16 +62,18 @@ async def pass_request(*, destination: str, request: Quart.request_class) -> Res
     """pass patched request to downstream services"""
     # cannot use **request. type(Quart.request) != type(session.request)
     async with aiohttp.ClientSession() as session:
+        data = await request.get_data()
         async with session.request(
-            request.method, destination, headers=request.headers
+            request.method,
+            destination,
+            headers=request.headers,
+            data=data,
+            cookies=request.cookies,
+            params=request.args,
         ) as response:
             resp_text, resp_status = await response.text(), response.status
     return Response(resp_text, status=resp_status)
 
 
-def main():
-    app.run()
-
-
 if __name__ == "__main__":
-    main()
+    app.run()

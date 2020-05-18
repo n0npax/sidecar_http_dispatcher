@@ -1,8 +1,9 @@
 from dataclasses import dataclass
 
 import pytest
+from quart import request
 
-from app import Config, config, pass_request, read_config
+from app import Config, app, config, pass_request, read_config
 
 
 @pytest.fixture
@@ -10,28 +11,62 @@ def destination():
     return "https://example.com"
 
 
+@pytest.fixture
+def ok_headers():
+    return {"environment": "qa"}
+
+
 @dataclass
 class DummyRequest:
-    headers: tuple = (("Host", "test"), ("foo", "Bar"))
+    headers: tuple = (("Host", "example.com"), ("foo", "Bar"))
+    data: str = ""
+    cookies: str = ""
 
 
-def dummy_request_factory(method):
+def dummy_request_factory(*, method, data):
     class Req(DummyRequest):
-        def __init__(self, method):
+        def __init__(self, method, data=""):
             self.method: str = method
+            self.data: Any = data
+            self.args: dict = None
+
+        async def get_data(self):
+            return self.data
 
     return Req(method)
 
 
+@pytest.fixture
+def testapp():
+    return app
+
+
+@pytest.mark.parametrize(
+    "path,code", (("/", 200), ("/foo", 404),),
+)
+@pytest.mark.asyncio
+async def test_app(path, code, testapp, ok_headers):
+    client = testapp.test_client()
+    response = await client.get(path, headers=ok_headers)
+    assert response.status_code == code
+
+
 @pytest.mark.asyncio
 @pytest.mark.parametrize(
-    "method", ("GET", "PUT", "HEAD", "POST", "OPTIONS"),
+    "method,data",
+    (
+        ("GET", None),
+        ("HEAD", None),
+        ("POST", "Foo"),
+        ("OPTIONS", None),
+        # ("PUT", "Foo"), not supported by example.com
+    ),
 )
-async def test_pass_request(method, destination):
+async def test_pass_request(method, data, destination):
     resp = await pass_request(
-        request=dummy_request_factory(method), destination=destination
+        request=dummy_request_factory(method=method, data=data), destination=destination
     )
-    assert 200 <= resp.status_code < 500
+    assert 200 == resp.status_code
 
 
 def test_read_config():

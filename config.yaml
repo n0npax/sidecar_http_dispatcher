@@ -1,17 +1,17 @@
 rewrites:
   dev:
     patch:
-      - key: Host1a
-        val: development
+      - key: Host
+        val: example.com
       - key: dispatched
         val: true
     destination: http://example.com
   qa:
     patch:
-      - key: Host1a
-        val: qa
+      - key: Host
+        val: example.net
       - key: dispatched
         val: true
-    destination: http://example.com
+    destination: http://example.net
 key: environment
-destination: http://example.com/default
+destination: http://example.org
