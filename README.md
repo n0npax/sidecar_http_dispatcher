@@ -2,9 +2,9 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![codecov](https://codecov.io/gh/n0npax/sidecar_http_dispatcher/branch/master/graph/badge.svg)](https://codecov.io/gh/n0npax/sidecar_http_dispatcher)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/397fd620bb8845d4b70fc744d3fa9761)](https://app.codacy.com/manual/n0npax/sidecar_http_dispatcher?utm_source=github.com&utm_medium=referral&utm_content=n0npax/sidecar_http_dispatcher&utm_campaign=Badge_Grade_Settings)
-![CodeCov](https://github.com/n0npax/sidecar_http_dispatcher/workflows/CodeCov/badge.svg)
-![Docker Image](https://github.com/n0npax/sidecar_http_dispatcher/workflows/Docker%20Image/badge.svg)
 [![License](https://img.shields.io/:license-mit-blue.svg)](https://badges.mit-license.org)
+![Tests](https://github.com/n0npax/sidecar_http_dispatcher/workflows/Tests/badge.svg)
+![e2e](https://github.com/n0npax/sidecar_http_dispatcher/workflows/e2e/badge.svg)
 
 ---
 
