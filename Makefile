@@ -32,6 +32,8 @@ build:  clean test cover lint
 clean:
 	rm -fr dist
 	rm -fr cli.egg-info
+	rm poetry.lock
+	rm codecov_upload.sh
 	find . -name __pycache__ | xargs rm -fr
 	find . -name '*.pyc' -delete
 

@@ -1,0 +1,17 @@
+rewrites:
+  dev:
+    patch:
+      - key: Host
+        val: example.com
+      - key: dispatched
+        val: true
+    destination: http://example.com
+  qa:
+    patch:
+      - key: Host
+        val: example.net
+      - key: dispatched
+        val: true
+    destination: http://example.net
+key: environment
+destination: http://example.org

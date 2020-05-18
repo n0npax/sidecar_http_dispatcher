@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 
 import pytest
-from quart import request
 
 from app import Config, app, config, pass_request, read_config
 
@@ -16,6 +15,11 @@ def ok_headers():
     return {"environment": "qa"}
 
 
+@pytest.fixture
+def testapp():
+    return app
+
+
 @dataclass
 class DummyRequest:
     headers: tuple = (("Host", "example.com"), ("foo", "Bar"))
@@ -27,18 +31,13 @@ def dummy_request_factory(*, method, data):
     class Req(DummyRequest):
         def __init__(self, method, data=""):
             self.method: str = method
-            self.data: Any = data
-            self.args: dict = None
+            self.data = data
+            self.args = None
 
         async def get_data(self):
             return self.data
 
     return Req(method)
-
-
-@pytest.fixture
-def testapp():
-    return app
 
 
 @pytest.mark.parametrize(

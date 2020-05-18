@@ -1,7 +1,7 @@
-name: CodeCov
+name: Tests
 on: [push]
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     env:
       PYTHON: "3.8"
@@ -17,11 +17,26 @@ jobs:
           poetry env use system
           poetry install
           poetry run pytest -vs --cov-report=xml --cov=./ .
+      - name: Upload report
+        uses: actions/upload-artifact@v1
+        with:
+          name: codecov_report
+          path: ./coverage.xml
+  push_codecov:
+    needs: test
+    runs-on: ubuntu-latest
+    env:
+      PYTHON: "3.8"
+    steps:
+      - name: Download math result for tests execution
+        uses: actions/download-artifact@v1
+        with:
+          name: codecov_report
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage.xml
+          file: ./codecov_report/coverage.xml
           flags: unittests
           env_vars: OS,PYTHON
           name: codecov-umbrella

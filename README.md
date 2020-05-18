@@ -6,6 +6,18 @@
 ![Docker Image](https://github.com/n0npax/sidecar_http_dispatcher/workflows/Docker%20Image/badge.svg)
 [![License](https://img.shields.io/:license-mit-blue.svg)](https://badges.mit-license.org)
 
+---
+
+On this page
+- [sidecar http dispatcher](#sidecar-http-dispatcher)
+  - [Why](#why)
+  - [How](#how)
+  - [Example](#example)
+  - [Configuration](#configuration)
+    - [Passing config](#passing-config)
+    - [Config schema](#config-schema)
+  - [project CI/CD](#project-cicd)
+
 # sidecar http dispatcher
 
 Easy dispatcher which may mitigate properiatery/legacy software limitations
@@ -66,7 +78,7 @@ INFO:quart.serving:127.0.0.1:41346 GET / 1.0 404 345 373429
 [2020-05-17 04:26:29,720] 127.0.0.1:41346 GET / 1.0 404 345 373429
 INFO:quart.serving:127.0.0.1:41354 GET /favicon.ico 1.0 404 103 952
 [2020-05-17 04:26:30,107] 127.0.0.1:41354 GET /favicon.ico 1.0 404 103 952
-INFO:sidecar http dispatcher:patching headers: [{'key': 'Host1a', 'val': 'qa'}, {'key': 'dispatched', 'val': True}]
+INFO:sidecar http dispatcher:patching headers: [{'key': 'Host', 'val': 'example.com'}, {'key': 'dispatched', 'val': True}]
 ```
 
 And as we can see, dispatched request was made to final destination
@@ -89,7 +101,7 @@ sudo tcpdump -i wlp3s0 -nn -s0 -v port 80
         User-Agent: curl/7.65.3
         Accept: */*
         Environment: qa
-        Host1a: qa
+        Host: example.com
         dispatched: True
         Accept-Encoding: gzip, deflate
 
@@ -107,5 +119,39 @@ PING example.com (93.184.216.34) 56(84) bytes of data.
 rtt min/avg/max/mdev = 164.694/164.694/164.694/0.000 ms
 ```
 
-## TODO - project board
-check [todo list](https://github.com/n0npax/sidecar_http_dispatcher/projects)
+Which basically proves that given request was passed to domain `example.com` base on provided configuration.
+```bash
+curl 'localhost:5000' -H 'environment: qa'
+<!doctype html>
+<html>
+<head>
+    <title>Example Domain</title>
+
+    <meta charset="utf-8" />
+...
+```
+
+## Configuration
+
+### Passing config
+
+App is reading configuration from path specified by environment variable `SIDECAR_CONFIG`. If variable is not setup, it fallback to `config.yaml`.
+
+### Config schema
+
+```yaml
+rewrites: # set of rewrite rules
+  dev: # value of key propery. i.e -H 'environment: dev'
+    patch: # action type
+      - key: Host # header key
+        val: example.com # header value
+      - key: dispatched
+        val: true
+    destination: http://example.com # (optional) destination url
+key: environment # key used to dispatch request
+destination: http://example.org # default destination url
+```
+
+## project CI/CD
+
+Check [workflows](.github/workflows/).
