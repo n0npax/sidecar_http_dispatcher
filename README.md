@@ -21,7 +21,7 @@ Using [Ambassador pattern](https://docs.microsoft.com/en-us/azure/architecture/p
 
 [Talk is cheap show me the code](./app.py)
 
-![flow](img/flow.png)
+![flow](img/flow.svg)
 
 ## Example
 
@@ -41,12 +41,8 @@ acme-enricher-6d9c4bd5b-fhld7   2/2     Running   0          5m44s
 
 and `service` was exposed as:
 ```bash
-minikube service acme-enricher
-|-----------|---------------|-------------|-----------------------------|
-| NAMESPACE   | NAME            | TARGET PORT   | URL                           |
-| ----------- | --------------- | ------------- | ----------------------------- |
-| default     | acme-enricher   | 80            | http://192.168.39.206:30314   |
-| ----------- | --------------- | ------------- | ----------------------------- |
+minikube service acme-enricher --url=true
+http://192.168.39.206:30314
 ```
 
 An http request to exposed service was made
