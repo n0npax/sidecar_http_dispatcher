@@ -17,6 +17,7 @@ On this page
     - [Passing config](#passing-config)
     - [Config schema](#config-schema)
   - [project CI/CD](#project-cicd)
+    - [Performance](#performance)
 
 # sidecar http dispatcher
 
@@ -155,3 +156,7 @@ destination: http://example.org # default destination url
 ## project CI/CD
 
 Check [workflows](.github/workflows/).
+
+### Performance
+
+Check k6 report in [workflows](.github/workflows/).
