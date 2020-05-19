@@ -10,4 +10,5 @@ RUN poetry env use system
 RUN poetry config virtualenvs.create false --local
 RUN poetry install --no-dev
 COPY . .
-ENTRYPOINT hypercorn app:app -b 127.0.0.1.:${SIDECAR_PORT}
+ENV SIDECAR_PORT=8192
+ENTRYPOINT hypercorn app:app -b localhost.:${SIDECAR_PORT}
