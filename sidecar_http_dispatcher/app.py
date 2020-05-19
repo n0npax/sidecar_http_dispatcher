@@ -1,11 +1,7 @@
-import os
-import sys
-
 import aiohttp
-import yaml
 from quart import Quart, Response, request
 
-from sidecar_http_dispatcher import APP_NAME, logger
+from sidecar_http_dispatcher import logger
 from sidecar_http_dispatcher.config import Config
 
 ALL_HTTP_METHODS = ("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS")
