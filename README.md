@@ -24,6 +24,11 @@ On this page
 
 Easy dispatcher which may mitigate properiatery/legacy software limitations
 
+Like it? Star it!
+
+![star](img/star.png)
+
+
 ## Why
 
 You are using traffic enricher developed by `acme corp` which is very expensive it doesn't support any dispatching.
