@@ -28,6 +28,7 @@ jobs:
     env:
       PYTHON: "3.8"
     steps:
+      - uses: actions/checkout@master
       - name: Download math result for tests execution
         uses: actions/download-artifact@v1
         with:
