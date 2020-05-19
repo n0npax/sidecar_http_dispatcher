@@ -9,6 +9,7 @@ from quart import Quart, Response, request
 
 ALL_HTTP_METHODS = ("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS")
 CONFIG_FILE = os.environ.get("SIDECAR_CONFIG", "config.yaml")
+PORT = int(os.environ.get("SIDECAR_PORT", 8192))
 APP_NAME = "sidecar http dispatcher"
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
@@ -83,4 +84,4 @@ async def pass_request(*, destination: str, request: Quart.request_class) -> Res
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(port=PORT)
