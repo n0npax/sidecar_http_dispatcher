@@ -33,7 +33,7 @@ jobs:
           ENDPOINT=$(minikube service acme-enricher --url=true)
           sleep 90
           kubectl wait --for=condition=available --timeout=120s deployment/acme-enricher
-          curl -m 5 -v ${ENDPOINT} -H 'environment: qa' --show-error --fail
+          curl -m 5 -v ${ENDPOINT} -H 'environment: dev' --show-error --fail
       - name: k6 Load Test
         run: |
           sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 379CE192D401AB61
