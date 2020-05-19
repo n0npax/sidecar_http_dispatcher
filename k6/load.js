@@ -1,5 +1,5 @@
 import http from "k6/http";
-import { sleep, check } from "k6";
+import { check, group, sleep } from "k6";
 import { Counter } from "k6/metrics";
 
 // A simple counter for http requests
@@ -11,14 +11,24 @@ export const requests = new Counter("http_reqs");
 
 export const options = {
     stages: [
-        { target: 5, duration: "5s" },
-        { target: 25, duration: "5s" },
-        { target: 125, duration: "5s" },
-        { target: 625, duration: "5s" },
+        { target: 5, duration: "15s" },
+        { target: 25, duration: "15s" },
+        { target: 125, duration: "15s" },
+        { target: 625, duration: "15s" },
+        { target: 125, duration: "15s" },
+        { target: 25, duration: "15s" },
+        { target: 5, duration: "15s" },
     ],
     thresholds: {
         requests: ["count < 100"],
     },
+
+    ext: {
+        loadimpact: {
+            projectID: 3492532,
+            name: "CI github"
+        }
+    }
 };
 
 export default function () {
@@ -33,8 +43,20 @@ export default function () {
 
     sleep(1);
 
-    const checkRes = check(res, {
-        "status is 200": (r) => r.status === 200,
-        "response body": (r) => r.body.indexOf("destination-service-app"),
+    group("GET", function () {
+        let res = http.get("http://httpbin.org/get?verb=get");
+        check(res, {
+            "status is 200": (r) => r.status === 200,
+            "response body": (r) => r.body.indexOf("destination-service-app"),
+            "is verb correct": (r) => r.json().args.verb === "get",
+        });
+    });
+
+    group("POST", function () {
+        let res = http.post("http://httpbin.org/post", { verb: "post" });
+        check(res, {
+            "status is 200": (r) => r.status === 200,
+            "is verb correct": (r) => r.json().form.verb === "post",
+        });
     });
 }
