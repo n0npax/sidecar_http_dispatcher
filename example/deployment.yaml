@@ -17,7 +17,7 @@ spec:
       containers:
         - name: sidecar-http-dispatcher
           image: n0npax/sidecar_http_dispatcher:0.0.1
-          imagePullPolicy: Always
+          imagePullPolicy: Never
           resources:
             requests:
               memory: "64Mi"
@@ -34,7 +34,6 @@ spec:
               value: /app/config/sidecar_config.yaml
         - name: acme-properiatery-software
           image: nginx:latest
-          imagePullPolicy: Always
           resources:
             requests:
               memory: "256Mi"
@@ -65,7 +64,6 @@ spec:
                 path: sidecar_config.yaml
         - name: log
           emptyDir: {}
-
 ---
 apiVersion: v1
 kind: Service
@@ -100,6 +98,17 @@ spec:
           image: nginx:latest
           ports:
             - containerPort: 80
+          volumeMounts:
+            - mountPath: /usr/share/nginx/html
+              readOnly: true
+              name: index-html
+      volumes:
+        - name: index-html
+          configMap:
+            name: index-html
+            items:
+              - key: index.html
+                path: index.html
 ---
 apiVersion: v1
 kind: Service

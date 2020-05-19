@@ -34,6 +34,6 @@ export default function () {
 
     const checkRes = check(res, {
         "status is 200": (r) => r.status === 200,
-        "response body": (r) => r.body.indexOf("Example Domain"),
+        "response body": (r) => r.body.indexOf("destination-service-app"),
     });
 }

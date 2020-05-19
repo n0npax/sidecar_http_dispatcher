@@ -5,6 +5,7 @@
 [![License](https://img.shields.io/:license-mit-blue.svg)](https://badges.mit-license.org)
 ![Tests](https://github.com/n0npax/sidecar_http_dispatcher/workflows/Tests/badge.svg)
 ![e2e](https://github.com/n0npax/sidecar_http_dispatcher/workflows/e2e/badge.svg)
+![docker release](https://github.com/n0npax/sidecar_http_dispatcher/workflows/docker_release/badge.svg)
 
 ---
 

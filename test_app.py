@@ -12,7 +12,7 @@ def destination():
 
 @pytest.fixture
 def ok_headers():
-    return {"environment": "qa"}
+    return {"environment": "dev"}
 
 
 @pytest.fixture
@@ -58,6 +58,7 @@ async def test_app(path, code, testapp, ok_headers):
         ("HEAD", None),
         ("POST", "Foo"),
         ("OPTIONS", None),
+        # ("DELETE", None)
         # ("PUT", "Foo"), not supported by example.com
     ),
 )

@@ -1,0 +1,18 @@
+name: docker_release
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  push_docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Docker image
+        run: |
+          USERNAME=n0npax
+          VERSION=$(cat pyproject.toml | grep version | awk '{print $3}' | tr -d '"')
+          docker build . --tag ${USERNAME}/sidecar_http_dispatcher:${VERSION}
+          docker login --username ${USERNAME} -p ${{ secrets.DOCKER_TOKEN }}
+          docker push ${USERNAME}/sidecar_http_dispatcher:${VERSION}

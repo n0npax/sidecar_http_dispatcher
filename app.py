@@ -60,7 +60,7 @@ async def dispatch_and_pass(path) -> Response:
         logger.info(f"patching headers: {rules['patch']}")
         for rule in rules["patch"]:
             new_headers[rule["key"]] = rule["val"]
-        destination = rules.get(destination, destination)
+        destination = rules.get("destination", destination)
     request.headers.update(new_headers)
     return await pass_request(destination=f"{destination}/{path}", request=request)
 

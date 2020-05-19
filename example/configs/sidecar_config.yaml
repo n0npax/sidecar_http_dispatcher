@@ -8,10 +8,8 @@ rewrites:
     destination: http://example.com
   qa:
     patch:
-      - key: Host
-        val: destination-service-app.default.svc.cluster.local
       - key: dispatched
         val: true
     destination: http://destination-service-app.default.svc.cluster.local
 key: environment
-destination: http://example.org
+destination: no_default
