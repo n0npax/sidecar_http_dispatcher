@@ -2,7 +2,9 @@ from dataclasses import dataclass
 
 import pytest
 
-from app import Config, app, config, pass_request, read_config
+from sidecar_http_dispatcher.config import Config
+from sidecar_http_dispatcher.app import app, config, pass_request
+from sidecar_http_dispatcher.config import read_config
 
 
 @pytest.fixture
