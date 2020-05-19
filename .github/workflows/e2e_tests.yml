@@ -42,7 +42,7 @@ jobs:
           sudo apt-get install k6 -y
 
           ENDPOINT=$(minikube service acme-enricher --url=true)
-          k6 run k6/load.js -e ENDPOINT="${ENDPOINT}" --summary-export k6summary.json
+          k6 run  k6/load.js -e ENDPOINT="${ENDPOINT}" --summary-export k6summary.json
       - name: Upload k6 summary
         uses: actions/upload-artifact@v1
         with:

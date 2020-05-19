@@ -26,6 +26,7 @@ async def dispatch_and_pass(path) -> Response:
             new_headers[rule["key"]] = rule["val"]
         destination = rules.get("destination", destination)
     request.headers.update(new_headers)
+    destination.rstrip("/")
     return await pass_request(destination=f"{destination}/{path}", request=request)
 
 

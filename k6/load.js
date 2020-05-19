@@ -13,11 +13,8 @@ export const options = {
     stages: [
         { target: 5, duration: "15s" },
         { target: 25, duration: "15s" },
-        { target: 125, duration: "15s" },
-        { target: 625, duration: "15s" },
-        { target: 125, duration: "15s" },
-        { target: 25, duration: "15s" },
-        { target: 5, duration: "15s" },
+        { target: 50, duration: "15s" },
+
     ],
     thresholds: {
         requests: ["count < 100"],
