@@ -39,8 +39,8 @@ spec:
               memory: "256Mi"
               cpu: "500m"
             limits:
-              memory: "6Gi"
-              cpu: "4000m"
+              memory: "4Gi"
+              cpu: "2000m"
           ports:
             - containerPort: 80
           volumeMounts:
@@ -102,6 +102,13 @@ spec:
             - mountPath: /usr/share/nginx/html
               readOnly: true
               name: index-html
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "500m"
+            limits:
+              memory: "2Gi"
+              cpu: "1000m"
       volumes:
         - name: index-html
           configMap:
