@@ -27,9 +27,9 @@ jobs:
           ENDPOINT=$(minikube service acme-enricher --url=true)
 
           # wait for system
-          kubectl wait --for=condition=available --timeout=120s deployment/acme-enricher
-          kubectl wait --for=condition=available --timeout=120s deployment/destination-service-app
-          sleep 5
+          kubectl wait --for=condition=available --timeout=300s deployment/acme-enricher
+          kubectl wait --for=condition=available --timeout=300s deployment/destination-service-app
+          sleep 15
           kubectl get po
 
           # run basic e2e

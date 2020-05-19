@@ -12,4 +12,4 @@ rewrites:
         val: true
     destination: http://destination-service-app.default.svc.cluster.local
 key: environment
-destination: no_default
+destination: http://github.com
