@@ -1,4 +1,5 @@
 import os
+import sys
 
 import yaml
 
@@ -26,7 +27,7 @@ class ConfigMeta(type):
             config_dict = read_config()
         except FileNotFoundError as e:
             logger.critical(f"cannot open config file: {e}")
-            os.exit(1)
+            sys.exit(1)
         for name, val in config_dict.items():
             new_attrs[name] = val
         return type(future_class_name, future_class_parents, new_attrs)
