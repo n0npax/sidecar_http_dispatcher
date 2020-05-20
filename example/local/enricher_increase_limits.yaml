@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: acme-enricher
+spec:
+  template:
+    spec:
+      containers:
+        - name: sidecar-http-dispatcher
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: 500m
+        - name: acme-properiatery-software
+          resources:
+            limits:
+              memory: 2Gi
+              cpu: 2000m

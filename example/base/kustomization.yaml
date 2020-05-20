@@ -1,0 +1,13 @@
+resources:
+  - destination_app.yaml
+  - enricher_app.yaml
+configMapGenerator:
+  - name: nginx-conf
+    files:
+      - configs/nginx.conf
+  - name: sidecar-conf
+    files:
+      - configs/sidecar_config.yaml
+  - name: index-html
+    files:
+      - configs/index.html

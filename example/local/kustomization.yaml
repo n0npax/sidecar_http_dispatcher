@@ -1,0 +1,5 @@
+bases:
+  - ../base
+patchesStrategicMerge:
+  - enricher_increase_limits.yaml
+  - destination_app_increase_limits.yaml

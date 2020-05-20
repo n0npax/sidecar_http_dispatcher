@@ -10,6 +10,6 @@ rewrites:
     patch:
       - key: dispatched
         val: true
-    destination: http://destination-service-app.default.svc.cluster.local
+    destination: http://destination-app.default.svc.cluster.local
 key: environment
 destination: http://github.com

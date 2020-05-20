@@ -1,0 +1,52 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: destination-app
+  labels:
+    app: destination-app
+spec:
+  selector:
+    matchLabels:
+      app: destination-app
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: destination-app
+    spec:
+      containers:
+        - name: destination-app
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - mountPath: /usr/share/nginx/html
+              readOnly: true
+              name: index-html
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "300m"
+            limits:
+              memory: "256Mi"
+              cpu: "300m"
+      volumes:
+        - name: index-html
+          configMap:
+            name: index-html
+            items:
+              - key: index.html
+                path: index.html
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: destination-app
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: destination-app

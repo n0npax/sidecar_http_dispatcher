@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+MODE=${MODE:-local}
+
+cd "../$(dirname $0)"
+pgrep -lf minikube || minikube start --cpus=4 --memory=8g
+
+# store image in minikube
+eval $(minikube docker-env) # use local docker images
+
+# build fresh image
+USERNAME=n0npax
+VERSION=latest
+docker build . --tag ${USERNAME}/sidecar_http_dispatcher:${VERSION}
+
+# deploy
+kubectl apply -k example/${MODE}
+
+# wait for main system
+kubectl wait --for=condition=available --timeout=300s deployment/acme-enricher
+kubectl wait --for=condition=available --timeout=300s deployment/destination-app
+
+ENDPOINT=$(minikube service acme-enricher --url=true)
+
+if [ "${MODE}" == "local" ]; then
+    # just on local
+    helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+    helm install stable/influxdb --name-template influxdb
+    helm install stable/grafana --name-template grafana
+    # wait for metrics destination
+    kubectl get po
+    kubectl wait --for=condition=available --timeout=300s deployment/grafana
+fi
+# failsafe wait
+sleep 15
+kubectl get po
+
+# run basic e2e
+curl -m 5 -v ${ENDPOINT} -H 'environment: qa' --show-error --fail
