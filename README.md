@@ -176,3 +176,4 @@ Check [workflows](.github/workflows/).
 ```bash
 
 ```
+![k6results](img/performance.png)
