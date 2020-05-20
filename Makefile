@@ -30,10 +30,7 @@ build:  clean test cover lint
 
 .PHONY: clean
 clean:
-	rm -fr dist
-	rm -fr cli.egg-info
-	rm poetry.lock
-	rm codecov_upload.sh
+	rm -fr dist cli.egg-info poetry.lock codecov_upload.sh || true
 	find . -name __pycache__ | xargs rm -fr
 	find . -name '*.pyc' -delete
 

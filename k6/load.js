@@ -1,1 +1,0 @@
-../example/local/configMaps/k6script.js

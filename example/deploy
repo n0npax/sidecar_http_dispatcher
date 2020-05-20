@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 
+command -v minikube || exit 1
+command -v jq || exit 1
+
 MODE=${MODE:-local}
 
-cd "../$(dirname $0)"
+cd $(dirname $PWD/$0)/..
 pgrep -lf minikube || minikube start --cpus=4 --memory=8g
 
 # prepare metrics
