@@ -9,8 +9,8 @@ spec:
         - name: sidecar-http-dispatcher
           resources:
             limits:
-              memory: 512Mi
-              cpu: 500m
+              memory: 256Mi
+              cpu: 1000m
         - name: acme-properiatery-software
           resources:
             limits:

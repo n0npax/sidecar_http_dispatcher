@@ -13,6 +13,6 @@ jobs:
         run: |
           USERNAME=n0npax
           VERSION=$(cat pyproject.toml | grep version | awk '{print $3}' | tr -d '"')
-          docker build . --tag ${USERNAME}/sidecar_http_dispatcher:${VERSION}
+          docker build . --tag ${USERNAME}/sidecar_http_dispatcher:${VERSION} --tag ${USERNAME}/sidecar_http_dispatcher:latest
           docker login --username ${USERNAME} -p ${{ secrets.DOCKER_TOKEN }}
-          docker push ${USERNAME}/sidecar_http_dispatcher:${VERSION}
+          docker push ${USERNAME}/sidecar_http_dispatcher:${VERSION} ${USERNAME}/sidecar_http_dispatcher:latest

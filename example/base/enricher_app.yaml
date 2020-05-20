@@ -34,6 +34,8 @@ spec:
               value: /app/config/sidecar_config.yaml
             - name: SIDECAR_PORT
               value: "5000"
+            - name: SIDECAR_LOGGING_LEVEL
+              value: "ERROR"
         - name: acme-properiatery-software
           image: nginx:latest
           resources:

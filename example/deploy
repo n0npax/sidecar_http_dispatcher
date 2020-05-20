@@ -50,12 +50,16 @@ if [ "${MODE}" == "local" ]; then
     kubectl apply -k example/k6test
 
     # access to grafana
+    echo
+    echo
     echo -n "grafana passowrd: "
-    base64 -d <<< $(kubectl get secrets grafana -ojson |jq '.data["admin-password"]' | tr -d '"')
-    echo
+    kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
     echo -n "grafana username: "
-    base64 -d <<< $(kubectl get secrets grafana -ojson |jq '.data["admin-user"]' | tr -d '"')
-    echo
+    kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-user}" | base64 --decode ; echo
     echo "influxdb: http://influxdb.default.svc.cluster.local:8086"
+    echo "influxdb database: k6"
     echo "grafana: import dashboard - 2587"
+    kubectl expose svc grafana --type=NodePort --name grafana-nodeport --target-port=3000
+    minikube service grafana-nodeport
+    kubectl apply -k k6test
 fi
