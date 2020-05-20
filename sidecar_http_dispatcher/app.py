@@ -26,7 +26,6 @@ async def dispatch_and_pass(path) -> Response:
             new_headers[rule["key"]] = rule["val"]
         destination = rules.get("destination", destination)
     request.headers.update(new_headers)
-    destination.rstrip("/")
     return await pass_request(destination=f"{destination}/{path}", request=request)
 
 
@@ -44,5 +43,10 @@ async def pass_request(*, destination: str, request: Quart.request_class) -> Res
             cookies=request.cookies,
             params=request.args,
         ) as response:
-            resp_text, resp_status = await response.text(), response.status
-    return Response(resp_text, status=resp_status)
+            resp_text, resp_status, resp_headers = (
+                await response.text(),
+                response.status,
+                dict(response.headers),
+            )
+    # TODO pass all properties to response
+    return Response(resp_text, status=resp_status, headers=resp_headers)

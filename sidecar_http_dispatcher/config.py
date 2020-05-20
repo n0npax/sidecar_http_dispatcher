@@ -30,6 +30,13 @@ class ConfigMeta(type):
             sys.exit(1)
         for name, val in config_dict.items():
             new_attrs[name] = val
+
+        # strip destination fields
+        key = "destination"
+        for _, val in new_attrs["rewrites"].items():
+            val[key] = val[key].rstrip("/")
+        new_attrs[key] = new_attrs[key].rstrip("/")
+
         return type(future_class_name, future_class_parents, new_attrs)
 
 
