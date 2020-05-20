@@ -31,6 +31,8 @@ export const options = {
         { target: 125, duration: "60s" },
         { target: 140, duration: "60s" },
         { target: 140, duration: "60s" },
+        { target: 155, duration: "60s" },
+        { target: 155, duration: "60s" },
     ],
     thresholds: {
         requests: ["count < 100"],
@@ -51,11 +53,9 @@ export default function () {
         check(res, {
             "status is 200": (r) => r.status === 200,
             "response body": (r) => r.body.indexOf("destination-service-app"),
-            //"is verb correct": (r) => r.json().args.verb === "get",
+            "header": (r) => r.headers["Destination_app"] === "ok",
         });
+
     });
-
-
     sleep(1);
-
 }
