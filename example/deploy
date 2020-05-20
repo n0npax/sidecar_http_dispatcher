@@ -61,5 +61,5 @@ if [ "${MODE}" == "local" ]; then
     echo "grafana: import dashboard - 2587"
     kubectl expose svc grafana --type=NodePort --name grafana-nodeport --target-port=3000
     minikube service grafana-nodeport
-    kubectl apply -k k6test
+    kubectl apply -k example/k6test
 fi

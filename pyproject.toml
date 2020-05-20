@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sidecar_http_dispatcher"
-version = "0.0.1"
+version = "0.0.2"
 description = "POC of sidecar to pass traffic to other host base on custom header"
 authors = ["Marcin Niemira <marcin.niemira@gmail.com>"]
 license = "MIT"
