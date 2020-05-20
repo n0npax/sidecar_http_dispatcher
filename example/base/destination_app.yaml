@@ -24,6 +24,9 @@ spec:
             - mountPath: /usr/share/nginx/html
               readOnly: true
               name: index-html
+            - mountPath: /etc/nginx/conf.d/
+              readOnly: true
+              name: nginx-conf
           resources:
             requests:
               memory: "256Mi"
@@ -38,6 +41,12 @@ spec:
             items:
               - key: index.html
                 path: index.html
+        - name: nginx-conf
+          configMap:
+            name: destination-nginx-conf
+            items:
+              - key: destination-nginx.conf
+                path: default.conf
 ---
 apiVersion: v1
 kind: Service

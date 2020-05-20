@@ -11,24 +11,29 @@ export const requests = new Counter("http_reqs");
 
 export const options = {
     stages: [
-        { target: 1, duration: "60s" },
-        { target: 1, duration: "60s" },
-        { target: 25, duration: "60s" },
-        { target: 25, duration: "60s" },
-        { target: 50, duration: "180s" },
-        { target: 50, duration: "180s" },
-        { target: 75, duration: "180s" },
-        { target: 75, duration: "180s" },
+        { target: 5, duration: "60s" },
+        { target: 5, duration: "60s" },
+        { target: 20, duration: "60s" },
+        { target: 20, duration: "60s" },
+        { target: 35, duration: "60s" },
+        { target: 35, duration: "60s" },
+        { target: 50, duration: "60s" },
+        { target: 50, duration: "60s" },
+        { target: 65, duration: "60s" },
+        { target: 65, duration: "60s" },
+        { target: 80, duration: "60s" },
+        { target: 80, duration: "60s" },
+        { target: 95, duration: "60s" },
+        { target: 95, duration: "60s" },
+        { target: 110, duration: "60s" },
+        { target: 110, duration: "60s" },
+        { target: 125, duration: "60s" },
+        { target: 125, duration: "60s" },
+        { target: 140, duration: "60s" },
+        { target: 140, duration: "60s" },
     ],
     thresholds: {
         requests: ["count < 100"],
-    },
-
-    ext: {
-        loadimpact: {
-            projectID: 3492532,
-            name: "CI github"
-        }
     }
 };
 
@@ -40,7 +45,6 @@ export default function () {
         redirects: 15,
         tags: { k6test: "yes" },
     };
-    let res = http.get(`${__ENV.ENDPOINT}`, params);
 
     group("GET", function () {
         let res = http.get(`${__ENV.ENDPOINT}`, params);
@@ -51,13 +55,7 @@ export default function () {
         });
     });
 
-    group("POST", function () {
-        let res = http.post(`${__ENV.ENDPOINT}`, params);
-        check(res, {
-            "status is 200": (r) => r.status === 200,
-            //"is verb correct": (r) => r.json().form.verb === "post",
-        });
-    });
+
     sleep(1);
 
 }

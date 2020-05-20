@@ -2,9 +2,12 @@ resources:
   - destination_app.yaml
   - enricher_app.yaml
 configMapGenerator:
-  - name: nginx-conf
+  - name: acme-nginx-conf
     files:
-      - configMaps/nginx.conf
+      - configMaps/acme-nginx.conf
+  - name: destination-nginx-conf
+    files:
+      - configMaps/destination-nginx.conf
   - name: sidecar-conf
     files:
       - configMaps/sidecar_config.yaml

@@ -56,9 +56,9 @@ spec:
       volumes:
         - name: nginx-conf
           configMap:
-            name: nginx-conf
+            name: acme-nginx-conf
             items:
-              - key: nginx.conf
+              - key: acme-nginx.conf
                 path: nginx.conf
         - name: sidecar-conf
           configMap:

@@ -18,7 +18,7 @@ On this page
     - [Passing config](#passing-config)
     - [Config schema](#config-schema)
   - [project CI/CD](#project-cicd)
-    - [Performance](#performance)
+  - [Performance](#performance)
 
 ---
 
@@ -165,6 +165,14 @@ destination: http://example.org # default destination url
 
 Check [workflows](.github/workflows/).
 
-### Performance
+## Performance
 
-Check k6 report in [workflows](.github/workflows/).
+|                | Host | Minikube |
+| -------------- | ---- | -------- |
+| CPU (i7-8550U) | 8cpu | 4vcpu    |
+| RAM            | 32   | 8        |
+|                |      |          |
+
+```bash
+
+```
