@@ -35,6 +35,7 @@ async def pass_request(*, destination: str, request: Quart.request_class) -> Res
     # cannot use **request. type(Quart.request) != type(session.request)
     async with aiohttp.ClientSession() as session:
         data = await request.get_data()
+        logger.info(f"passing {request.method} to {destination}")
         async with session.request(
             request.method,
             destination,

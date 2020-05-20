@@ -14,17 +14,3 @@ jobs:
       - name: Run e2e in k8s CI Cluster
         run: |
           MODE=ci ./example/deploy
-      - name: k6 Load Test
-        run: |
-          sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 379CE192D401AB61
-          echo "deb https://dl.bintray.com/loadimpact/deb stable main" | sudo tee -a /etc/apt/sources.list
-          sudo apt-get update
-          sudo apt-get install k6 -y
-
-          ENDPOINT=$(minikube service acme-enricher --url=true)
-          k6 run  k6/load.js -e ENDPOINT="${ENDPOINT}" --summary-export k6summary.json
-      - name: Upload k6 summary
-        uses: actions/upload-artifact@v1
-        with:
-          name: k6_summary
-          path: ./k6summary.json

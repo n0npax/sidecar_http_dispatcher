@@ -11,9 +11,11 @@ export const requests = new Counter("http_reqs");
 
 export const options = {
     stages: [
-        { target: 5, duration: "15s" },
-        { target: 25, duration: "15s" },
-        { target: 50, duration: "15s" },
+        { target: 1, duration: "60s" },
+        { target: 25, duration: "60s" },
+        { target: 50, duration: "300s" },
+        { target: 75, duration: "300s" },
+        { target: 100, duration: "300s" },
 
     ],
     thresholds: {
@@ -36,24 +38,24 @@ export default function () {
         redirects: 15,
         tags: { k6test: "yes" },
     };
-    let res = http.get(`${__ENV.ENDPOINT}/`, params);
-
-    sleep(1);
+    let res = http.get(`${__ENV.ENDPOINT}`, params);
 
     group("GET", function () {
-        let res = http.get(`${__ENV.ENDPOINT}/`);
+        let res = http.get(`${__ENV.ENDPOINT}`, params);
         check(res, {
             "status is 200": (r) => r.status === 200,
             "response body": (r) => r.body.indexOf("destination-service-app"),
-            "is verb correct": (r) => r.json().args.verb === "get",
+            //"is verb correct": (r) => r.json().args.verb === "get",
         });
     });
 
     group("POST", function () {
-        let res = http.post(`${__ENV.ENDPOINT}/`, { verb: "post" });
+        let res = http.post(`${__ENV.ENDPOINT}`, params);
         check(res, {
             "status is 200": (r) => r.status === 200,
-            "is verb correct": (r) => r.json().form.verb === "post",
+            //"is verb correct": (r) => r.json().form.verb === "post",
         });
     });
+    sleep(1);
+
 }

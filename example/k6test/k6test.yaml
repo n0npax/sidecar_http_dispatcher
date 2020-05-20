@@ -14,13 +14,16 @@ spec:
           resources: {}
           args:
             - run
-            - -o
-            - http://influxdb.default.svc.cluster.local:8086
+            - --out
+            - influxdb=http://influxdb.default.svc.cluster.local:8086/k6
             - /app/k6/load.js
           volumeMounts:
             - mountPath: /app/k6
               readOnly: true
               name: k6script
+          env:
+            - name: ENDPOINT
+              value: http://acme-enricher.default.svc.cluster.local/
       volumes:
         - name: k6script
           configMap:

@@ -7,6 +7,8 @@ pgrep -lf minikube || minikube start --cpus=4 --memory=8g
 
 # prepare metrics
 if [ "${MODE}" == "local" ]; then
+    minikube addons enable metrics-server
+    minikube addons enable helm-tiller
     # just on local
     helm repo add stable https://kubernetes-charts.storage.googleapis.com/
     helm install stable/influxdb --name-template influxdb
@@ -39,3 +41,18 @@ kubectl get po
 
 # run basic e2e
 curl -m 5 -v ${ENDPOINT} -H 'environment: qa' --show-error --fail
+
+if [ "${MODE}" == "local" ]; then
+    # run full k6
+    kubectl apply -k example/k6test
+
+    # access to grafana
+    echo -n "grafana passowrd: "
+    base64 -d <<< $(kubectl get secrets grafana -ojson |jq '.data["admin-password"]' | tr -d '"')
+    echo
+    echo -n "grafana username: "
+    base64 -d <<< $(kubectl get secrets grafana -ojson |jq '.data["admin-user"]' | tr -d '"')
+    echo
+    echo "influxdb: http://influxdb.default.svc.cluster.local:8086"
+    echo "grafana: import dashboard - 2587"
+fi

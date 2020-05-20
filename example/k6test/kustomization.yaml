@@ -1,5 +1,3 @@
-bases:
-  - ../base
 configMapGenerator:
   - name: k6script
     files:
