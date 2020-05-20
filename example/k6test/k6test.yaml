@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  creationTimestamp: null
+  name: k6-test
+spec:
+  template:
+    metadata:
+      creationTimestamp: null
+    spec:
+      containers:
+        - image: loadimpact/k6:latest
+          name: k6-test
+          resources: {}
+          args:
+            - run
+            - -o
+            - http://influxdb.default.svc.cluster.local:8086
+            - /app/k6/load.js
+          volumeMounts:
+            - mountPath: /app/k6
+              readOnly: true
+              name: k6script
+      volumes:
+        - name: k6script
+          configMap:
+            name: k6script
+            items:
+              - key: k6script.js
+                path: load.js
+      restartPolicy: Never
+status: {}

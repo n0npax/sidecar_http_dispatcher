@@ -1,0 +1,8 @@
+bases:
+  - ../base
+configMapGenerator:
+  - name: k6script
+    files:
+      - ./configMaps/k6script.js
+resources:
+  - k6test.yaml

@@ -5,6 +5,16 @@ MODE=${MODE:-local}
 cd "../$(dirname $0)"
 pgrep -lf minikube || minikube start --cpus=4 --memory=8g
 
+# prepare metrics
+if [ "${MODE}" == "local" ]; then
+    # just on local
+    helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+    helm install stable/influxdb --name-template influxdb
+    helm install stable/grafana --name-template grafana
+    # wait for metrics destination
+    #kubectl wait --for=condition=available --timeout=300s deployment/grafana
+fi
+
 # store image in minikube
 eval $(minikube docker-env) # use local docker images
 
@@ -22,15 +32,7 @@ kubectl wait --for=condition=available --timeout=300s deployment/destination-app
 
 ENDPOINT=$(minikube service acme-enricher --url=true)
 
-if [ "${MODE}" == "local" ]; then
-    # just on local
-    helm repo add stable https://kubernetes-charts.storage.googleapis.com/
-    helm install stable/influxdb --name-template influxdb
-    helm install stable/grafana --name-template grafana
-    # wait for metrics destination
-    kubectl get po
-    kubectl wait --for=condition=available --timeout=300s deployment/grafana
-fi
+
 # failsafe wait
 sleep 15
 kubectl get po
