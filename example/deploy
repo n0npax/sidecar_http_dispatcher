@@ -38,6 +38,7 @@ kubectl wait --for=condition=available --timeout=300s deployment/destination-app
 
 ENDPOINT=$(minikube service acme-enricher --url=true)
 kubectl get po
+sleep 5
 
 # run basic e2e
 curl -m 5 -v ${ENDPOINT} -H 'environment: qa' --show-error --fail
@@ -59,6 +60,12 @@ if [ "${MODE}" == "local" ]; then
     kubectl expose svc grafana --type=NodePort --name grafana-nodeport --target-port=3000 || true
     minikube service grafana-nodeport
     kubectl apply -k example/k6test
-    while true; do kubectl get po -l job-name=k6test | grep -q Running && break; echo wating; sleep 1; done
-    sleep 40; watch -n60 "date >> top_data; kubectl top pods -l app=acme-enricher-app --containers=true 2>&1 >> top_data"
+    while true; do
+        kubectl get po -l job-name=k6test | grep -q Running && break; echo wating; sleep 1;
+    done
+    sleep 40;
+    while true; do
+        date >> top_data; kubectl top pods -l app=acme-enricher-app --containers=true 2>&1 >> top_data; sleep 60;
+        kubectl get po -l job-name=k6test | grep -q -v Running && break;
+    done
 fi

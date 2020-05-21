@@ -175,13 +175,4 @@ Environment:
 | RAM            | 32   | 8        |
 
 
-Results:
-| VUs | cpu  | mem  | avg resp |
-| --- | ---- | ---- | -------- |
-| 35  | 149m | 50Mi | 25ms     |
-
-
-```bash
-
-```
 ![k6results](img/performance.png)

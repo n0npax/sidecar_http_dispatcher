@@ -6,3 +6,5 @@ codecov_upload.sh
 k6summary.json
 .coverage
 coverage.xml
+pytestdebug.log
+top_data
