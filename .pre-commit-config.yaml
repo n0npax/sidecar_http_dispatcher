@@ -13,8 +13,9 @@ repos:
       hooks:
           - id: pytest
             name: pytest
-            entry: pytest
-            args: ["-n3"]
-            files: .
-            language: system
+            entry: poetry
+            args: ["run", "pytest", "-v"]
             types: [python]
+            language: python
+            always_run: true
+            pass_filenames: false

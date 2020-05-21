@@ -15,8 +15,8 @@ if [ "${MODE}" == "local" ]; then
     minikube addons enable helm-tiller
     # just on local
     helm repo add stable https://kubernetes-charts.storage.googleapis.com/
-    helm install stable/influxdb --name-template influxdb
-    helm install stable/grafana --name-template grafana
+    helm install stable/influxdb --name-template influxdb || true
+    helm install stable/grafana --name-template grafana || true
     # wait for metrics destination
     #kubectl wait --for=condition=available --timeout=300s deployment/grafana
 fi
@@ -27,7 +27,7 @@ eval $(minikube docker-env) # use local docker images
 # build fresh image
 USERNAME=n0npax
 VERSION=latest
-docker build . --tag ${USERNAME}/sidecar_http_dispatcher:${VERSION}
+docker build --tag ${USERNAME}/sidecar_http_dispatcher:${VERSION} .
 
 # deploy
 kubectl apply -k example/${MODE}
@@ -60,7 +60,7 @@ if [ "${MODE}" == "local" ]; then
     echo "influxdb: http://influxdb.default.svc.cluster.local:8086"
     echo "influxdb database: k6"
     echo "grafana: import dashboard - 2587"
-    kubectl expose svc grafana --type=NodePort --name grafana-nodeport --target-port=3000
+    kubectl expose svc grafana --type=NodePort --name grafana-nodeport --target-port=3000 || true
     minikube service grafana-nodeport
     kubectl apply -k example/k6test
 fi
