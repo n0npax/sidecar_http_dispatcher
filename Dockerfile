@@ -11,6 +11,8 @@ COPY pyproject.toml .
 RUN poetry env use system
 RUN poetry config virtualenvs.create false --local
 RUN poetry install --no-dev
-COPY . .
+COPY sidecar_http_dispatcher sidecar_http_dispatcher
+COPY app.py app.py
 COPY _nginx.conf /etc/nginx/nginx.conf
-ENTRYPOINT nginx && uvicorn app:app --uds /tmp/sidecar.sock
+ENV SIDECAR_PORT 5000
+ENTRYPOINT sed -i "s/SIDECAR_PORT/$SIDECAR_PORT/g" /etc/nginx/nginx.conf && nginx && uvicorn app:app --uds /tmp/sidecar.sock

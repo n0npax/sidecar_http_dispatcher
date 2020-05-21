@@ -37,10 +37,6 @@ kubectl wait --for=condition=available --timeout=300s deployment/acme-enricher
 kubectl wait --for=condition=available --timeout=300s deployment/destination-app
 
 ENDPOINT=$(minikube service acme-enricher --url=true)
-
-
-# failsafe wait
-sleep 15
 kubectl get po
 
 # run basic e2e
