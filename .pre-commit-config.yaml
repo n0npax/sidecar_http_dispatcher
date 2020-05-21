@@ -13,6 +13,7 @@ repos:
       hooks:
           - id: pytest
             name: pytest
-            entry: "pytest -n3 ."
+            entry: pytest
+            args: ["."]
             language: system
             types: [python]
