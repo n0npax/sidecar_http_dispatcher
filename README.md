@@ -17,7 +17,7 @@ On this page
   - [Configuration](#configuration)
     - [Passing config](#passing-config)
     - [Config schema](#config-schema)
-  - [project CI/CD](#project-cicd)
+  - [Project CI/CD](#project-cicd)
   - [Performance](#performance)
 
 ---
@@ -161,17 +161,25 @@ key: environment # key used to dispatch request
 destination: http://example.org # default destination url
 ```
 
-## project CI/CD
+## Project CI/CD
 
 Check [workflows](.github/workflows/).
 
 ## Performance
 
+Environment:
+
 |                | Host | Minikube |
 | -------------- | ---- | -------- |
 | CPU (i7-8550U) | 8cpu | 4vcpu    |
 | RAM            | 32   | 8        |
-|                |      |          |
+
+
+Results:
+| VUs | cpu  | mem  | avg resp |
+| --- | ---- | ---- | -------- |
+| 35  | 149m | 50Mi | 25ms     |
+
 
 ```bash
 
