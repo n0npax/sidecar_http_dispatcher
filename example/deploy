@@ -2,15 +2,15 @@
 
 set -ex
 
-command -v minikube || echo "Please install minikube" && exit 1
 
 MODE=${MODE:-local}
 
 cd $(dirname $PWD/$0)/..
-pgrep -lf minikube || minikube start --cpus=4 --memory=8g
 
 # prepare metrics
 if [ "${MODE}" == "local" ]; then
+    pgrep -lf minikube || minikube start --cpus=4 --memory=8g
+
     minikube addons enable metrics-server
     minikube addons enable helm-tiller
     # just on local
