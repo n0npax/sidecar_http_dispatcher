@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
+set -ex
+
 command -v minikube || echo "Please install minikube" && exit 1
-command -v jq || echo "Please install jq" && exit 1
 
 MODE=${MODE:-local}
 

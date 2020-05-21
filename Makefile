@@ -21,8 +21,11 @@ endif
 
 .PHONY: test
 test:
-	poetry run pytest -vs --cov-report=xml --cov . .
+	poetry run pytest -n3 -vs --cov-report=xml --cov . .
 
+.PHONY: hooks
+hooks:
+	pre-commit install
 
 .PHONY: build
 build:  clean test cover lint

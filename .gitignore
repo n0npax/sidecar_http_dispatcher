@@ -4,3 +4,5 @@ poetry.lock
 .codecov_token
 codecov_upload.sh
 k6summary.json
+.coverage
+coverage.xml
