@@ -2,7 +2,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   creationTimestamp: null
-  name: k6-test
+  name: k6test
 spec:
   template:
     metadata:
@@ -10,7 +10,7 @@ spec:
     spec:
       containers:
         - image: loadimpact/k6:latest
-          name: k6-test
+          name: k6test
           resources: {}
           args:
             - run
