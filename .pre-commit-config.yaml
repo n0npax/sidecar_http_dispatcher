@@ -15,5 +15,6 @@ repos:
             name: pytest
             entry: pytest
             args: ["-n3"]
+            files: .
             language: system
             types: [python]
