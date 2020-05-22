@@ -19,6 +19,8 @@ On this page
     - [Config schema](#config-schema)
   - [Project CI/CD](#project-cicd)
   - [Performance](#performance)
+    - [http req duration](#http-req-duration)
+    - [grafana screenshots](#grafana-screenshots)
 
 ---
 
@@ -174,6 +176,16 @@ Environment:
 | CPU (i7-8550U) | 8cpu | 4vcpu    |
 | RAM            | 32   | 8        |
 
+### http req duration
+
+| version    | max(ms) | p95(ms) | p90(ms) | min(ms) | Vus | Request per second |
+| ---------- | ------- | ------- | ------- | ------- | --- | ------------------ |
+| bare       | 45      | 13      | 6       | 0       | 200 | 3000               |
+| 0.0.2 (py) | 170     | 144     | 128     | 4       | 200 | 2700               |
+| 0.0.3 (go) |         |         |         |         | 200 |
+
+
+### grafana screenshots
 
 | python sidecar (0.0.2)      | without sidecar            |
 | --------------------------- | -------------------------- |
