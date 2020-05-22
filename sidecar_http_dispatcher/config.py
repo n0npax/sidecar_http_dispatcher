@@ -36,7 +36,6 @@ class ConfigMeta(type):
         for _, val in new_attrs["rewrites"].items():
             val[key] = val[key].rstrip("/")
         new_attrs[key] = new_attrs[key].rstrip("/")
-
         return type(future_class_name, future_class_parents, new_attrs)
 
 

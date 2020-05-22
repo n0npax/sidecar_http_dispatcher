@@ -17,14 +17,14 @@ config = Config()
 @app.route("/<path:path>", methods=ALL_HTTP_METHODS)
 async def dispatch_and_pass(path) -> Response:
     """Patch request base on config and pass it to downstream."""
-    new_headers, destination = {}, config.destination
+    new_headers, default_destination = {}, config.destination
     matched_header = request.headers.get(config.key)
     if matched_header in config.rewrites:
         rules = config.rewrites[matched_header]
         logger.info(f"patching headers: {rules['patch']}")
         for rule in rules["patch"]:
             new_headers[rule["key"]] = rule["val"]
-        destination = rules.get("destination", destination)
+        destination = rules.get("destination", default_destination)
     request.headers.update(new_headers)
     # TODO pass all properties to request
     return await pass_request(destination=f"{destination}/{path}", request=request)

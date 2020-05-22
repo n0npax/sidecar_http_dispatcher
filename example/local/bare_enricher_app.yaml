@@ -2,41 +2,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: acme-enricher
+  name: bare-acme-enricher
   labels:
-    app: acme-enricher-app
+    app: bare-acme-enricher-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: acme-enricher-app
+      app: bare-acme-enricher-app
   template:
     metadata:
       labels:
-        app: acme-enricher-app
+        app: bare-acme-enricher-app
     spec:
       containers:
-        - name: sidecar-http-dispatcher
-          image: n0npax/sidecar_http_dispatcher:latest
-          imagePullPolicy: Never
-          resources:
-            requests:
-              memory: "64Mi"
-              cpu: "100m"
-            limits:
-              memory: "64Mi"
-              cpu: "100m"
-          volumeMounts:
-            - mountPath: /app/config
-              readOnly: true
-              name: sidecar-conf
-          env:
-            - name: SIDECAR_CONFIG
-              value: /app/config/sidecar_config.yaml
-            - name: SIDECAR_PORT
-              value: "5000"
-            - name: SIDECAR_LOGGING_LEVEL
-              value: "ERROR"
         - name: acme-properiatery-software
           image: nginx:latest
           resources:
@@ -44,8 +23,8 @@ spec:
               memory: "256Mi"
               cpu: "300m"
             limits:
-              memory: "256Mi"
-              cpu: "300m"
+              memory: "2Gi"
+              cpu: "2000m"
           ports:
             - containerPort: 80
           volumeMounts:
@@ -57,9 +36,9 @@ spec:
       volumes:
         - name: nginx-conf
           configMap:
-            name: acme-nginx-conf
+            name: bare-acme-nginx-conf
             items:
-              - key: acme-nginx.conf
+              - key: bare-acme-nginx.conf
                 path: nginx.conf
         - name: sidecar-conf
           configMap:
@@ -73,11 +52,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: acme-enricher
+  name: bare-acme-enricher
 spec:
   type: LoadBalancer
   ports:
     - port: 80
       targetPort: 80
   selector:
-    app: acme-enricher-app
+    app: bare-acme-enricher-app

@@ -12,7 +12,7 @@ def destination():
 
 
 @pytest.fixture
-def ok_headers():
+def dev_headers():
     return {"environment": "dev"}
 
 
@@ -41,13 +41,20 @@ def dummy_request_factory(*, method, data):
     return Req(method)
 
 
-@pytest.mark.parametrize(
-    "path,code", (("/", 200), ("/foo", 404),),
-)
+@pytest.mark.parametrize("path,code", (("/", 200), ("/foo", 404)))
 @pytest.mark.asyncio
-async def test_app(path, code, testapp, ok_headers):
+async def test_app_dev_headers(path, code, testapp, dev_headers):
     client = testapp.test_client()
-    response = await client.get(path, headers=ok_headers)
+    response = await client.get(path, headers=dev_headers)
+    assert response.status_code == code
+
+
+# default path is pointing to not reachable url
+@pytest.mark.parametrize("path,code", (("/", 500),))
+@pytest.mark.asyncio
+async def test_app_no_headers(path, code, testapp):
+    client = testapp.test_client()
+    response = await client.get(path)
     assert response.status_code == code
 
 

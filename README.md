@@ -175,4 +175,6 @@ Environment:
 | RAM            | 32   | 8        |
 
 
-![k6results](img/performance.png)
+| With sidecar                      | without                           |
+| --------------------------------- | --------------------------------- |
+| ![k6results](img/performance.png) | ![k6results](img/performance.png) |

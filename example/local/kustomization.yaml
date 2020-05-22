@@ -3,3 +3,9 @@ bases:
 patchesStrategicMerge:
   - enricher_increase_limits.yaml
   - destination_app_increase_limits.yaml
+configMapGenerator:
+  - name: bare-acme-nginx-conf
+    files:
+      - configMaps/bare-acme-nginx.conf
+resources:
+  - bare_enricher_app.yaml

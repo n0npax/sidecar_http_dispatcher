@@ -9,7 +9,7 @@ cd $(dirname $PWD/$0)/..
 
 # prepare metrics
 if [ "${MODE}" == "local" ]; then
-    pgrep -lf minikube || minikube start --cpus=4 --memory=8g
+    pgrep -lf minikube || minikube start --cpus=5 --memory=10g
 
     minikube addons enable metrics-server
     minikube addons enable helm-tiller
@@ -43,6 +43,7 @@ sleep 5
 # run basic e2e
 curl -m 5 -v ${ENDPOINT} -H 'environment: qa' --show-error --fail
 
+set +x
 if [ "${MODE}" == "local" ]; then
     # run full k6
     kubectl apply -k example/k6test
@@ -55,7 +56,7 @@ if [ "${MODE}" == "local" ]; then
     echo -n "grafana username: "
     kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-user}" | base64 --decode ; echo
     echo "influxdb: http://influxdb.default.svc.cluster.local:8086"
-    echo "influxdb database: k6"
+    echo "influxdb database: k6bare & k6side"
     echo "grafana: import dashboard - 2587"
     kubectl expose svc grafana --type=NodePort --name grafana-nodeport --target-port=3000 || true
     minikube service grafana-nodeport
