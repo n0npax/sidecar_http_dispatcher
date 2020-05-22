@@ -175,6 +175,6 @@ Environment:
 | RAM            | 32   | 8        |
 
 
-| With sidecar                      | without                           |
-| --------------------------------- | --------------------------------- |
-| ![k6results](img/performance.png) | ![k6results](img/performance.png) |
+| python sidecar (0.0.2)      | without sidecar            |
+| --------------------------- | -------------------------- |
+| ![k6results](img/0_0_2.png) | ![k6results](img/bare.png) |
