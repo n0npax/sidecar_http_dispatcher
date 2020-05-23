@@ -1,4 +1,4 @@
-EXECUTABLES := poetry curl isort bandit
+EXECUTABLES := curl go golangci-lint
 K := $(foreach exec,$(EXECUTABLES),\
         $(if $(shell which $(exec)),some string,$(error "No $(exec) in PATH")))
 
@@ -6,10 +6,8 @@ K := $(foreach exec,$(EXECUTABLES),\
 .PHONY: lint
 lint:
 	sed -i 's/[ \t]*$$//' $(shell find . -name "*.md")
-	sed -i 's/[ \t]*$$//' $(shell find . -name "*.py")
-	isort $(shell find . -name "*.py") -qy
-	bandit -r . -x $(shell find . -name "test_*.py" | tr "\n" ",")
-	poetry run black .
+	sed -i 's/[ \t]*$$//' $(shell find . -name "*.go")
+	golangci-lint run
 
 cover: test codecov_upload.sh
 ifeq ("$(wildcard .codecov_token)","")
@@ -21,7 +19,8 @@ endif
 
 .PHONY: test
 test:
-	poetry run pytest -n3 -vs --cov-report=xml --cov . .
+	go test -v -race -coverprofile=coverage.out -covermode=atomic ./...
+	go tool cover -func=coverage.out
 
 .PHONY: hooks
 hooks:
@@ -29,18 +28,7 @@ hooks:
 
 .PHONY: build
 build:  clean test cover lint
-	poetry $@
-
-.PHONY: clean
-clean:
-	rm -fr dist cli.egg-info poetry.lock codecov_upload.sh || true
-	find . -name __pycache__ | xargs rm -fr
-	find . -name '*.pyc' -delete
-
-.PHONY: full-clean
-full-clean: clean
-	rm $${HOME}/.config/lime-comb/ -fr || true
-	rm $${HOME}/.local/share/lime-comb/ -fr || true
+	go build -o app ./...
 
 
 codecov_upload.sh:

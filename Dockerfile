@@ -1,9 +1,13 @@
-FROM golang:buster
+FROM golang:latest
 LABEL maintainer=marcin.niemria@gmail.com
 LABEL author="Marcin Niemira <n0npax>"
 WORKDIR /app
-RUN mkdir /app/config
 COPY . .
-COPY _nginx.conf /etc/nginx/nginx.conf
+RUN go build -o app ./...
+
+FROM scratch
+LABEL maintainer=marcin.niemria@gmail.com
+LABEL author="Marcin Niemira <n0npax>"
 ENV SIDECAR_PORT 5000
-ENTRYPOINT go run main.go
+COPY --from=0 /app/app /app
+ENTRYPOINT /app

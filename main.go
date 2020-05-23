@@ -3,7 +3,9 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
+	"net/url"
 	"os"
 
 	"github.com/go-chi/chi"
@@ -20,18 +22,19 @@ func main() {
 	client := &http.Client{}
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		u, err := url.Parse("http://example.com")
+		if err != nil {
+			log.Fatal(err)
+		}
 
-		req, err := http.NewRequest("GET", "http://example.com", nil)
+		r.URL = u
+		r.Host = u.Host
+		r.RequestURI = ""
+
+		resp, err := client.Do(r)
 		if err != nil {
 			panic(err)
 		}
-		req.Header.Add("sidecar_http_dispatched", "true")
-		for k, v := range r.Header {
-			fmt.Printf("-> %v %v\n", k, v[0])
-			req.Header.Add(k, v[0])
-		}
-
-		resp, _ := client.Do(req)
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
 			panic(err)
