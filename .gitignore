@@ -8,3 +8,4 @@ k6summary.json
 coverage.xml
 pytestdebug.log
 top_data
+coverage.out
