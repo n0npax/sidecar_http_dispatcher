@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 	"net/url"
-	"os"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -49,13 +48,5 @@ func main() {
 		}
 	})
 
-	http.ListenAndServe(getenv("SIDECAR_PORT", ":5000"), r)
-}
-
-func getenv(key, fallback string) string {
-	value := os.Getenv(key)
-	if len(value) == 0 {
-		return fallback
-	}
-	return value
+	http.ListenAndServe(utils.getenv("SIDECAR_PORT", ":5000"), r)
 }
