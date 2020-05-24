@@ -1,27 +1,31 @@
 name: Tests
 on: [push]
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    env:
+      GOLANG: "latest"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+      - name: Run golangci-lint
+        uses: actions-contrib/golangci-lint@v1
   test:
     runs-on: ubuntu-latest
     env:
-      PYTHON: "3.8"
+      GOLANG: "latest"
     steps:
-      - uses: actions/checkout@master
-      - name: Setup Python
-        uses: actions/setup-python@master
-        with:
-          python-version: 3.8
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+      - run: go version
       - name: Generate coverage report
         run: |
-          pip install poetry
-          poetry env use system
-          poetry install
-          poetry run pytest -vs --cov-report=xml --cov=./ .
+          go test -v -race -coverprofile=coverage.out -covermode=atomic ./...
       - name: Upload report
         uses: actions/upload-artifact@v1
         with:
           name: codecov_report
-          path: ./coverage.xml
+          path: ./coverage.out
   push_codecov:
     needs: test
     runs-on: ubuntu-latest
@@ -37,7 +41,7 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./codecov_report/coverage.xml
+          file: ./codecov_report/coverage.out
           flags: unittests
           env_vars: OS,PYTHON
           name: codecov-umbrella
