@@ -15,6 +15,7 @@ On this page
   - [Why](#why)
   - [How](#how)
   - [Example](#example)
+    - [E2E](#e2e)
   - [Configuration](#configuration)
     - [Passing config](#passing-config)
     - [Config schema](#config-schema)
@@ -50,14 +51,9 @@ Using [Ambassador pattern](https://docs.microsoft.com/en-us/azure/architecture/p
 
 ## Example
 
-assuming [example](./example) was deployed to `kubernetes` using minikube
+Assuming [example](./example) was deployed to `kubernetes` using minikube
 
-```bash
-kubectl create cm nginx-conf --from-file example/configs/nginx.conf
-kubectl apply -f example/deployment.yaml
-```
-
-and the pod `acme-enricher-6d9c4bd5b-fhld7` was created
+Pod `acme-enricher-6d9c4bd5b-fhld7` was created
 ```bash
 $kubectl get po
 NAME                            READY   STATUS    RESTARTS   AGE
@@ -72,10 +68,10 @@ http://192.168.39.206:30314
 
 An http request to exposed service was made
 ```bash
-curl -H 'environment: qa' http://192.168.39.206:30314/
+curl -H 'environment: dev' http://192.168.39.206:30314/
 ```
 
-Request will hit `acme-enricher` which will redirect traffic to `acme-properiatery-software` in pod using `localhost:5000`.
+Request will hit `acme-enricher` which will redirect traffic to `acme-properiatery-software` in pod using `localhost:5000` address.
 ```bash
 kubectl exec -it acme-enricher-6d9c4bd5b-fhld7  -c acme-properiatery-software -- tail -f /var/log/nginx/access.log
 remote_addr:172.17.0.1  time_local:17/May/2020:04:39:43 +0000   method:GET      uri:/   host:192.168.39.206     status:404      bytes_sent:345  referer:- seragent:curl/7.65.3   forwardedfor:-  request_time:0.382
@@ -144,6 +140,10 @@ curl 'localhost:5000' -H 'environment: qa'
 ...
 ```
 
+### E2E
+
+Very similar flow(`example.com` replaced with local `destination-app`) is provided as basic End to End test inside [deploy](./example/deploy) script. For detail please check [Project CI/CD](#project-cicd)
+
 ## Configuration
 
 ### Passing config
@@ -170,6 +170,8 @@ destination: http://example.org # default destination url
 Check [workflows](.github/workflows/).
 
 ## Performance
+
+Given data were generated for tags: `0.0.2` and `0.0.3`
 
 Environment:
 
