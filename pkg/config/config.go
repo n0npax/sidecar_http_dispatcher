@@ -56,5 +56,6 @@ func GetConfig() Config {
 	if err != nil {
 		logFatalfF("Critical error when parcing config file: %v", err)
 	}
+	log.Printf("Using config: %v", config)
 	return config
 }

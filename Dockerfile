@@ -1,13 +1,18 @@
-FROM golang:latest
+FROM golang:latest as builder
 LABEL maintainer=marcin.niemria@gmail.com
 LABEL author="Marcin Niemira <n0npax>"
-WORKDIR /app
-COPY . .
-RUN go build -o app ./...
+RUN mkdir /builder
+WORKDIR /builder
+COPY cmd cmd
+COPY go.mod .
+COPY go.sum .
+COPY pkg pkg
+RUN CGO_ENABLED=0 go build -o app cmd/main.go
 
-FROM scratch
+FROM alpine:latest
 LABEL maintainer=marcin.niemria@gmail.com
 LABEL author="Marcin Niemira <n0npax>"
 ENV SIDECAR_PORT 5000
-COPY --from=0 /app/app /app
-ENTRYPOINT /app
+RUN mkdir -p /app/config
+COPY --from=builder /builder/app /main
+CMD ["/main"]

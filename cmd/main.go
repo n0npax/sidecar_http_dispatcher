@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/go-chi/chi"
@@ -18,7 +20,9 @@ func main() {
 
 	r.HandleFunc("/*", handleAndPass)
 
-	http.ListenAndServe(utils.GetEnv("SIDECAR_PORT", ":5000"), r)
+	addr := fmt.Sprintf(":%s", utils.GetEnv("SIDECAR_PORT", "5000"))
+	log.Printf("Staring server on addres: %s", addr)
+	http.ListenAndServe(addr, r)
 }
 
 func handleAndPass(w http.ResponseWriter, r *http.Request) {
