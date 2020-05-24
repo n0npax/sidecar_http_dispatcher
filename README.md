@@ -1,6 +1,7 @@
 ![Tests](https://github.com/n0npax/sidecar_http_dispatcher/workflows/Tests/badge.svg)
 ![e2e](https://github.com/n0npax/sidecar_http_dispatcher/workflows/e2e/badge.svg)
 ![docker release](https://github.com/n0npax/sidecar_http_dispatcher/workflows/docker_release/badge.svg)
+![Linters](https://github.com/n0npax/sidecar_http_dispatcher/workflows/Linters/badge.svg)
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![codecov](https://codecov.io/gh/n0npax/sidecar_http_dispatcher/branch/master/graph/badge.svg)](https://codecov.io/gh/n0npax/sidecar_http_dispatcher)
@@ -19,8 +20,9 @@ On this page
     - [Config schema](#config-schema)
   - [Project CI/CD](#project-cicd)
   - [Performance](#performance)
-    - [http req duration](#http-req-duration)
-    - [grafana screenshots](#grafana-screenshots)
+    - [Http req duration](#http-req-duration)
+    - [Grafana screenshots](#grafana-screenshots)
+  - [Project evolution](#project-evolution)
 
 ---
 
@@ -176,17 +178,27 @@ Environment:
 | CPU (i7-8550U) | 8cpu | 4vcpu    |
 | RAM            | 32   | 8        |
 
-### http req duration
+### Http req duration
 
-| version    | max(ms) | p95(ms) | p90(ms) | min(ms) | Vus | Request per second |
-| ---------- | ------- | ------- | ------- | ------- | --- | ------------------ |
-| bare       | 45      | 13      | 6       | 0       | 200 | 3000               |
-| 0.0.2 (py) | 170     | 144     | 128     | 4       | 200 | 2700               |
-| 0.0.3 (go) |         |         |         |         | 200 |
+| version    | max(ms) | p95(ms) | p90(ms) | min(ms) | Vus |
+| ---------- | ------- | ------- | ------- | ------- | --- |
+| bare       | 45      | 13      | 6       | 0       | 200 |
+| 0.0.2 (py) | 170     | 144     | 128     | 4       | 200 |
+| 0.0.3 (go) | 57      | 34      | 24      | 1       | 200 |
 
 
-### grafana screenshots
+### Grafana screenshots
 
-| python sidecar (0.0.2)      | without sidecar            |
-| --------------------------- | -------------------------- |
-| ![k6results](img/0_0_2.png) | ![k6results](img/bare.png) |
+| performance                 |
+| --------------------------- |
+| Direct proxy pass           |
+| ![k6results](img/bare.png)  |
+| 0.0.2 (py)                  |
+| ![k6results](img/0_0_2.png) |
+| 0.0.3 (go)                  |
+| ![k6results](img/0_0_3.png) |
+
+## Project evolution
+
+First version of this project was developed using python `asgi` using [quart](https://pgjones.gitlab.io/quart/) framework.
+This old version is tagged as [0.0.2](https://github.com/n0npax/sidecar_http_dispatcher/releases/tag/0.0.2) and due to [not sufficent performance](#http-req-duration) was rewritten using `golang` which significantly improves performance.
