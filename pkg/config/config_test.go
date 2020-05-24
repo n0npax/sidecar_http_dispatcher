@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var (
+const (
 	okYamlConfigData0 = `
 destination: test
 `
@@ -39,13 +39,15 @@ destination: http://destination-app.default.svc.cluster.local
 	notMatchingYamlConfigData = `
 aaa: aaa
 `
-	randomJsonConfigData = `
+	randomJSONConfigData = `
 {"aaa": "aaa"}
 `
 )
 
 func TestBrokenConfig(t *testing.T) {
-	for i, data := range []string{notMatchingYamlConfigData, randomJsonConfigData, conflictingYamlConfigData} {
+	for i, data := range []string{notMatchingYamlConfigData, randomJSONConfigData, conflictingYamlConfigData} {
+		data := data
+
 		t.Run(fmt.Sprint(i), func(t *testing.T) {
 			config, err := buildConfig([]byte(data))
 			assert.Error(t, err, "expected error not present")
@@ -55,6 +57,8 @@ func TestBrokenConfig(t *testing.T) {
 }
 func TestConfigokData(t *testing.T) {
 	for i, data := range []string{okYamlConfigData0, okYamlConfigData1} {
+		data := data
+
 		t.Run(fmt.Sprint(i), func(t *testing.T) {
 			config, err := buildConfig([]byte(data))
 			assert.NoError(t, err, "expected error not present")
@@ -65,9 +69,12 @@ func TestConfigokData(t *testing.T) {
 }
 
 func TestReadConfigFile(t *testing.T) {
+	orgEnv := os.Getenv("SIDECAR_CONFIG")
+
+	defer func() { os.Setenv("SIDECAR_CONFIG", orgEnv) }()
+
 	for _, path := range []string{"/etc/hosts", "/etc/hostname"} {
-		orgEnv := os.Getenv("SIDECAR_CONFIG")
-		defer func() { os.Setenv("SIDECAR_CONFIG", orgEnv) }()
+		path := path
 		t.Run(path, func(t *testing.T) {
 			os.Setenv("SIDECAR_CONFIG", path)
 			_, err := readConfigFile()
@@ -79,12 +86,14 @@ func TestReadConfigFile(t *testing.T) {
 func TestGetConfigFail1(t *testing.T) {
 	readConfigFileF = func() ([]byte, error) { return []byte{}, errors.New("test") }
 	logFatalfF = func(string, ...interface{}) { panic("test") }
+
 	assert.Panics(t, func() { GetConfig() }, "expected mocked panic not present")
 }
 
 func TestGetConfigFail2(t *testing.T) {
 	buildConfigF = func([]byte) (Config, error) { return Config{}, errors.New("test") }
 	logFatalfF = func(string, ...interface{}) { panic("test") }
+
 	assert.Panics(t, func() { GetConfig() }, "expected mocked panic not present")
 }
 
@@ -92,5 +101,6 @@ func TestGetConfigMockedEmpty(t *testing.T) {
 	buildConfigF = func([]byte) (Config, error) { return Config{}, nil }
 	readConfigFileF = func() ([]byte, error) { return []byte{}, nil }
 	config := GetConfig()
+
 	assert.Equal(t, config, Config{}, "expected empty config for mocked input")
 }

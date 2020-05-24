@@ -27,13 +27,15 @@ type Rule struct {
 func buildConfig(data []byte) (Config, error) {
 	t := Config{}
 
-	err := yaml.Unmarshal([]byte(data), &t)
+	err := yaml.Unmarshal(data, &t)
 	if err != nil {
 		return Config{}, err
 	}
+
 	if t.Destination == "" {
 		return Config{}, errors.New("config doesn't have any destination")
 	}
+
 	return t, err
 }
 
@@ -41,10 +43,11 @@ func readConfigFile() ([]byte, error) {
 	return ioutil.ReadFile(utils.GetEnv("SIDECAR_CONFIG", "config.yaml"))
 }
 
+// mapping functions to vars to provide testing possibility
 var (
-	readConfigFileF = readConfigFile
-	buildConfigF    = buildConfig
-	logFatalfF      = log.Fatalf
+	readConfigFileF = readConfigFile // nolint
+	buildConfigF    = buildConfig    // nolint
+	logFatalfF      = log.Fatalf     // nolint
 )
 
 func GetConfig() Config {
@@ -52,10 +55,13 @@ func GetConfig() Config {
 	if err != nil {
 		logFatalfF("Critical error when reading config file: %v", err)
 	}
+
 	config, err := buildConfigF(fileContent)
 	if err != nil {
 		logFatalfF("Critical error when parcing config file: %v", err)
 	}
+
 	log.Printf("Using config: %v", config)
+
 	return config
 }

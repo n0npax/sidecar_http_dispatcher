@@ -21,15 +21,22 @@ func main() {
 	r.HandleFunc("/*", handleAndPass)
 
 	addr := fmt.Sprintf(":%s", utils.GetEnv("SIDECAR_PORT", "5000"))
-	log.Printf("Staring server on addres: %s", addr)
-	http.ListenAndServe(addr, r)
+	log.Printf("Staring server on address: %s", addr)
+
+	if err := http.ListenAndServe(addr, r); err != nil {
+		log.Fatal(err)
+	}
 }
 
 func handleAndPass(w http.ResponseWriter, r *http.Request) {
 	resp, body := dispatcher.Dispatch(r)
-	w.Write(body)
+	if _, err := w.Write(body); err != nil {
+		panic(err)
+	}
 
 	for k, v := range resp.Header {
 		w.Header().Add(k, v[0])
 	}
+
+	defer resp.Body.Close()
 }

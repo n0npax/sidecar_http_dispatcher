@@ -1,6 +1,7 @@
 ![Tests](https://github.com/n0npax/sidecar_http_dispatcher/workflows/Tests/badge.svg)
 ![e2e](https://github.com/n0npax/sidecar_http_dispatcher/workflows/e2e/badge.svg)
 ![docker release](https://github.com/n0npax/sidecar_http_dispatcher/workflows/docker_release/badge.svg)
+![Linters](https://github.com/n0npax/sidecar_http_dispatcher/workflows/Linters/badge.svg)
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![codecov](https://codecov.io/gh/n0npax/sidecar_http_dispatcher/branch/master/graph/badge.svg)](https://codecov.io/gh/n0npax/sidecar_http_dispatcher)
