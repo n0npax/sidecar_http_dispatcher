@@ -109,7 +109,7 @@ sudo tcpdump -i wlp3s0 -nn -s0 -v port 80
         Connection: close
         User-Agent: curl/7.65.3
         Accept: */*
-        Environment: qa
+        Environment: dev
         Host: example.com
         dispatched: True
         Accept-Encoding: gzip, deflate
@@ -130,7 +130,7 @@ rtt min/avg/max/mdev = 164.694/164.694/164.694/0.000 ms
 
 Which basically proves that given request was passed to domain `example.com` base on provided configuration.
 ```bash
-curl 'localhost:5000' -H 'environment: qa'
+curl 'localhost:5000' -H 'environment: dev'
 <!doctype html>
 <html>
 <head>

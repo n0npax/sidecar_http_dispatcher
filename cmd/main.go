@@ -1,9 +1,15 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"time"
+
+	"github.com/go-chi/valve"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -11,11 +17,15 @@ import (
 	"github.com/n0npax/sidecar_http_dispatcher/pkg/utils"
 )
 
+const shutfownTimeout = 5 * time.Second
+
 func main() {
+	valv := valve.New()
+	baseCtx := valv.Context()
+
 	r := chi.NewRouter()
 	r.Use(middleware.RequestID)
 	r.Use(middleware.Logger)
-	//r.Use(middleware.Profiler)
 	r.Use(middleware.Recoverer)
 
 	r.HandleFunc("/*", handleAndPass)
@@ -23,12 +33,48 @@ func main() {
 	addr := fmt.Sprintf(":%s", utils.GetEnv("SIDECAR_PORT", "5000"))
 	log.Printf("Staring server on address: %s", addr)
 
-	if err := http.ListenAndServe(addr, r); err != nil {
+	srv := http.Server{Addr: addr, Handler: chi.ServerBaseContext(baseCtx, r)}
+
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
+
+	go func() {
+		for range c {
+			log.Println("shutting down..")
+
+			// send valv
+			if err := valv.Shutdown(5 * time.Second); err != nil {
+				log.Fatal(err)
+			}
+
+			// create context with timeout
+			ctx, cancel := context.WithTimeout(context.Background(), shutfownTimeout)
+			defer cancel() // nolint
+
+			// graceful shutdown
+			if err := srv.Shutdown(ctx); err != nil {
+				log.Fatal(err)
+			}
+
+			select {
+			case <-time.After(shutfownTimeout + time.Second):
+				fmt.Println("not all connections done. Killing anyway via cancel()")
+			case <-ctx.Done():
+			}
+		}
+	}()
+
+	if err := srv.ListenAndServe(); err != nil {
 		log.Fatal(err)
 	}
 }
 
 func handleAndPass(w http.ResponseWriter, r *http.Request) {
+	if err := valve.Lever(r.Context()).Open(); err != nil {
+		panic(err)
+	}
+	defer valve.Lever(r.Context()).Close()
+
 	resp, body := dispatcher.Dispatch(r)
 	if _, err := w.Write(body); err != nil {
 		panic(err)
