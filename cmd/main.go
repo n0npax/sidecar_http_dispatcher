@@ -17,7 +17,7 @@ import (
 	"github.com/n0npax/sidecar_http_dispatcher/pkg/utils"
 )
 
-const shutfownTimeout = 5 * time.Second
+const shutdownTimeout = 5 * time.Second
 
 func main() {
 	valv := valve.New()
@@ -43,12 +43,12 @@ func main() {
 			log.Println("shutting down..")
 
 			// send valv
-			if err := valv.Shutdown(5 * time.Second); err != nil {
+			if err := valv.Shutdown(shutdownTimeout * time.Second); err != nil {
 				log.Fatal(err)
 			}
 
 			// create context with timeout
-			ctx, cancel := context.WithTimeout(context.Background(), shutfownTimeout)
+			ctx, cancel := context.WithTimeout(context.Background(), shutdownTimeout)
 			defer cancel() // nolint
 
 			// graceful shutdown
@@ -57,7 +57,7 @@ func main() {
 			}
 
 			select {
-			case <-time.After(shutfownTimeout + time.Second):
+			case <-time.After(shutdownTimeout + time.Second):
 				fmt.Println("not all connections done. Killing anyway via cancel()")
 			case <-ctx.Done():
 			}
