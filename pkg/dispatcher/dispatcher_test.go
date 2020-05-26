@@ -1,6 +1,7 @@
 package dispatcher
 
 import (
+	"context"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -10,9 +11,10 @@ import (
 )
 
 // mapping functions to vars to provide testing possibility
-func sendRequest(r http.Handler, method string) *httptest.ResponseRecorder {
-	req, _ := http.NewRequest(method, "/", nil)
+func sendRequest(ctx context.Context, r http.Handler, method string) *httptest.ResponseRecorder {
+	req := httptest.NewRequest(method, "/", nil)
 	req.Header.Add("environment", "dev")
+	req = req.WithContext(ctx)
 
 	w := httptest.NewRecorder()
 
@@ -22,8 +24,9 @@ func sendRequest(r http.Handler, method string) *httptest.ResponseRecorder {
 }
 
 func TestDispatch(t *testing.T) {
-	_, _, r := Dispatcher()
-	w := sendRequest(r, "GET")
+	r, _, ctx := Router()
+
+	w := sendRequest(ctx, r, "GET")
 	assert.Equal(t, http.StatusOK, w.Code)
 }
 

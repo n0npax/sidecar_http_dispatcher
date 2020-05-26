@@ -9,10 +9,7 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/go-chi/valve"
-
 	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
 	"github.com/n0npax/sidecar_http_dispatcher/pkg/dispatcher"
 	"github.com/n0npax/sidecar_http_dispatcher/pkg/utils"
 )
@@ -20,15 +17,7 @@ import (
 const shutdownTimeout = 5 * time.Second
 
 func main() {
-	valv := valve.New()
-	baseCtx := valv.Context()
-
-	r := chi.NewRouter()
-	r.Use(middleware.RequestID)
-	r.Use(middleware.Logger)
-	r.Use(middleware.Recoverer)
-
-	r.HandleFunc("/*", handleAndPass)
+	r, valv, baseCtx := dispatcher.Router()
 
 	addr := fmt.Sprintf(":%s", utils.GetEnv("SIDECAR_PORT", "5000"))
 	log.Printf("Staring server on address: %s", addr)
@@ -67,22 +56,4 @@ func main() {
 	if err := srv.ListenAndServe(); err != nil {
 		log.Fatal(err)
 	}
-}
-
-func handleAndPass(w http.ResponseWriter, r *http.Request) {
-	if err := valve.Lever(r.Context()).Open(); err != nil {
-		panic(err)
-	}
-	defer valve.Lever(r.Context()).Close()
-
-	resp, body := dispatcher.Dispatch(r)
-	if _, err := w.Write(body); err != nil {
-		panic(err)
-	}
-
-	for k, v := range resp.Header {
-		w.Header().Add(k, v[0])
-	}
-
-	defer resp.Body.Close()
 }

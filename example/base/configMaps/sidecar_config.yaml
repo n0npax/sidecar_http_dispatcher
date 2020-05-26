@@ -12,4 +12,4 @@ rewrites:
         val: true
     destination: http://destination-app.default.svc.cluster.local
 key: environment
-destination: example.com
+destination: https://example.com
