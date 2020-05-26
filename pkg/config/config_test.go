@@ -1,7 +1,6 @@
-package config
+package config // nolint
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"testing"
@@ -84,14 +83,14 @@ func TestReadConfigFile(t *testing.T) {
 }
 
 func TestGetConfigFail1(t *testing.T) {
-	readConfigFileF = func() ([]byte, error) { return []byte{}, errors.New("test") }
+	readConfigFileF = func() ([]byte, error) { return []byte{}, os.ErrNotExist }
 	logFatalfF = func(string, ...interface{}) { panic("test") }
 
 	assert.Panics(t, func() { GetConfig() }, "expected mocked panic not present")
 }
 
 func TestGetConfigFail2(t *testing.T) {
-	buildConfigF = func([]byte) (Config, error) { return Config{}, errors.New("test") }
+	buildConfigF = func([]byte) (Config, error) { return Config{}, os.ErrNotExist }
 	logFatalfF = func(string, ...interface{}) { panic("test") }
 
 	assert.Panics(t, func() { GetConfig() }, "expected mocked panic not present")

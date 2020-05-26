@@ -33,7 +33,7 @@ func buildConfig(data []byte) (Config, error) {
 	}
 
 	if t.Destination == "" {
-		return Config{}, errors.New("config doesn't have any destination")
+		return Config{}, errors.New("config doesn't have any destination") // nolint
 	}
 
 	return t, err
@@ -43,7 +43,7 @@ func readConfigFile() ([]byte, error) {
 	return ioutil.ReadFile(utils.GetEnv("SIDECAR_CONFIG", "config.yaml"))
 }
 
-// mapping functions to vars to provide testing possibility
+// mapping functions to vars to provide testing possibility.
 var (
 	readConfigFileF = readConfigFile // nolint
 	buildConfigF    = buildConfig    // nolint

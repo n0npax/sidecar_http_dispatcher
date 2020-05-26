@@ -2,7 +2,6 @@ package dispatcher
 
 import (
 	"context"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -14,7 +13,7 @@ import (
 	"github.com/n0npax/sidecar_http_dispatcher/pkg/config"
 )
 
-// mapping functions to vars to provide testing possibility
+// mapping functions to vars to provide testing possibility.
 var conf config.Config      // nolint
 var client = &http.Client{} // nolint
 var dispatchKey string      // nolint
@@ -34,8 +33,7 @@ func patch(r *http.Request) *http.Request {
 		log.Fatal(err)
 	}
 
-	r.RequestURI, r.URL.Scheme, r.Host = "", u.Scheme, u.Host
-	r.URL.Host = r.Host
+	r.RequestURI, r.URL.Scheme, r.Host, r.URL.Host = "", u.Scheme, u.Host, u.Host
 
 	return r
 }
@@ -76,9 +74,7 @@ func handleAndPass(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add(k, v[0])
 	}
 
-	fmt.Printf("RRRRRRRRRr %v <<<", code)
 	w.WriteHeader(code)
-	w.Header().Add("HTTP/1.1", resp.Status)
 
 	defer resp.Body.Close()
 }
@@ -90,9 +86,13 @@ func Router() (*chi.Mux, *valve.Valve, context.Context) {
 	baseCtx := valv.Context()
 
 	r := chi.NewRouter()
-	r.Use(middleware.RequestID)
-	r.Use(middleware.Logger)
-	r.Use(middleware.Recoverer)
+
+	r.Use(
+		middleware.RequestID,
+		middleware.Logger,
+		middleware.Recoverer,
+		middleware.GetHead,
+	)
 
 	r.HandleFunc("/*", handleAndPass)
 
