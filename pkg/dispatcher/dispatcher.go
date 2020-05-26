@@ -2,6 +2,7 @@ package dispatcher
 
 import (
 	"context"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -16,7 +17,7 @@ import (
 // mapping functions to vars to provide testing possibility
 var conf config.Config      // nolint
 var client = &http.Client{} // nolint
-var dispatchKey = conf.Key  // nolint
+var dispatchKey string      // nolint
 
 func patch(r *http.Request) *http.Request {
 	dk := r.Header.Get(dispatchKey)
@@ -33,12 +34,13 @@ func patch(r *http.Request) *http.Request {
 		log.Fatal(err)
 	}
 
-	r.RequestURI, r.URL, r.Host = "", u, u.Host
+	r.RequestURI, r.URL.Scheme, r.Host = "", u.Scheme, u.Host
+	r.URL.Host = r.Host
 
 	return r
 }
 
-func passRequest(r *http.Request) (*http.Response, []byte) {
+func passRequest(r *http.Request) (*http.Response, []byte, int) {
 	resp, err := client.Do(r)
 	if err != nil {
 		panic(err)
@@ -51,10 +53,10 @@ func passRequest(r *http.Request) (*http.Response, []byte) {
 
 	defer resp.Body.Close()
 
-	return resp, body
+	return resp, body, resp.StatusCode
 }
 
-func dispatch(r *http.Request) (*http.Response, []byte) {
+func dispatch(r *http.Request) (*http.Response, []byte, int) {
 	req := patch(r)
 	return passRequest(req)
 }
@@ -65,7 +67,7 @@ func handleAndPass(w http.ResponseWriter, r *http.Request) {
 	}
 	defer valve.Lever(r.Context()).Close()
 
-	resp, body := dispatch(r)
+	resp, body, code := dispatch(r)
 	if _, err := w.Write(body); err != nil {
 		panic(err)
 	}
@@ -74,11 +76,16 @@ func handleAndPass(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add(k, v[0])
 	}
 
+	fmt.Printf("RRRRRRRRRr %v <<<", code)
+	w.WriteHeader(code)
+	w.Header().Add("HTTP/1.1", resp.Status)
+
 	defer resp.Body.Close()
 }
 
 func Router() (*chi.Mux, *valve.Valve, context.Context) {
 	conf = config.GetConfig()
+	dispatchKey = conf.Key
 	valv := valve.New()
 	baseCtx := valv.Context()
 
