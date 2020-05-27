@@ -13,9 +13,10 @@ import (
 
 // mapping functions to vars to provide testing possibility.
 func sendRequest(r http.Handler, method, path, header string) *httptest.ResponseRecorder {
+	w := httptest.NewRecorder()
 	req := httptest.NewRequest(method, path, nil)
 	req.Header.Add("environment", header)
-	w := httptest.NewRecorder()
+
 	r.ServeHTTP(w, req)
 
 	return w

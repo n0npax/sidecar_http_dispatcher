@@ -71,7 +71,6 @@ func handleAndPass(c *gin.Context) {
 	}
 
 	c.String(code, string(body))
-
 }
 
 func Router() *gin.Engine {
