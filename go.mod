@@ -3,6 +3,7 @@ module github.com/n0npax/sidecar_http_dispatcher
 go 1.13
 
 require (
+	github.com/gin-gonic/gin v1.6.3
 	github.com/go-chi/chi v4.1.2-0.20200522135103-5704d7ee98ed+incompatible
 	github.com/go-chi/valve v0.0.0-20170920024740-9e45288364f4
 	github.com/stretchr/testify v1.5.1

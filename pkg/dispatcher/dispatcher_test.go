@@ -1,7 +1,6 @@
 package dispatcher_test
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -13,10 +12,9 @@ import (
 )
 
 // mapping functions to vars to provide testing possibility.
-func sendRequest(ctx context.Context, r http.Handler, method, path, header string) *httptest.ResponseRecorder {
+func sendRequest(r http.Handler, method, path, header string) *httptest.ResponseRecorder {
 	req := httptest.NewRequest(method, path, nil)
 	req.Header.Add("environment", header)
-	req = req.WithContext(ctx)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
@@ -36,8 +34,8 @@ func TestDispatch(t *testing.T) {
 	for _, test := range testCases {
 		path, header, code := test.path, test.header, test.code
 		t.Run(fmt.Sprintf("%s:%s", path, header), func(t *testing.T) {
-			r, _, ctx := dispatcher.Router()
-			w := sendRequest(ctx, r, "GET", path, header)
+			r := dispatcher.Router()
+			w := sendRequest(r, "GET", path, header)
 			assert.Equal(t, code, w.Code)
 		})
 	}

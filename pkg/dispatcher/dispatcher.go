@@ -1,15 +1,12 @@
 package dispatcher
 
 import (
-	"context"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
 
-	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
-	"github.com/go-chi/valve"
+	"github.com/gin-gonic/gin"
 	"github.com/n0npax/sidecar_http_dispatcher/pkg/config"
 )
 
@@ -41,7 +38,7 @@ func patch(r *http.Request) *http.Request {
 func passRequest(r *http.Request) (*http.Response, []byte, int) {
 	resp, err := client.Do(r)
 	if err != nil {
-		panic(err)
+		panic(err) // better handling required
 	}
 
 	body, err := ioutil.ReadAll(resp.Body)
@@ -56,45 +53,34 @@ func passRequest(r *http.Request) (*http.Response, []byte, int) {
 
 func dispatch(r *http.Request) (*http.Response, []byte, int) {
 	req := patch(r)
-	return passRequest(req)
-}
-
-func handleAndPass(w http.ResponseWriter, r *http.Request) {
-	if err := valve.Lever(r.Context()).Open(); err != nil {
-		panic(err)
-	}
-	defer valve.Lever(r.Context()).Close()
-
-	resp, body, code := dispatch(r)
-	if _, err := w.Write(body); err != nil {
-		panic(err)
-	}
-
-	for k, v := range resp.Header {
-		w.Header().Add(k, v[0])
-	}
-
-	w.WriteHeader(code)
+	resp, body, read := passRequest(req)
 
 	defer resp.Body.Close()
+
+	return resp, body, read
 }
 
-func Router() (*chi.Mux, *valve.Valve, context.Context) {
+func handleAndPass(c *gin.Context) {
+	r := c.Request
+	resp, body, code := dispatch(r)
+
+	defer resp.Body.Close()
+
+	if err := c.ShouldBindHeader(resp.Header); err != nil {
+		log.Println(err)
+	}
+
+	c.String(code, string(body))
+
+}
+
+func Router() *gin.Engine {
 	conf = config.GetConfig()
 	dispatchKey = conf.Key
-	valv := valve.New()
-	baseCtx := valv.Context()
 
-	r := chi.NewRouter()
+	r := gin.Default()
 
-	r.Use(
-		middleware.RequestID,
-		middleware.Logger,
-		middleware.Recoverer,
-		middleware.GetHead,
-	)
+	r.Any("/*path", handleAndPass)
 
-	r.HandleFunc("/*", handleAndPass)
-
-	return r, valv, baseCtx
+	return r
 }
