@@ -16,6 +16,7 @@ func sendRequest(r http.Handler, method, path, header string) *httptest.Response
 	w := httptest.NewRecorder()
 	req := httptest.NewRequest(method, path, nil)
 	req.Header.Add("environment", header)
+	req.Header.Add("dummy", "header-42")
 
 	r.ServeHTTP(w, req)
 
