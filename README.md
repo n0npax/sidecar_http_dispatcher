@@ -45,8 +45,6 @@ You can  deploy new copy per env/endpoint, but it cost too much. You can also us
 
 Using [Ambassador pattern](https://docs.microsoft.com/en-us/azure/architecture/patterns/ambassador) act as `mitm` and apply required transformations.
 
-[Talk is cheap show me the code](./app.py)
-
 ![flow](img/flow.svg)
 
 ## Example
