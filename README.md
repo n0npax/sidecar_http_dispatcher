@@ -27,7 +27,7 @@ On this page
 
 ---
 
-**Like it? Star it!**
+**Like it? Star it!!!**
 
 ![star](img/star.png)
 
