@@ -5,7 +5,7 @@
 [![codecov](https://codecov.io/gh/n0npax/sidecar_http_dispatcher/branch/master/graph/badge.svg)](https://codecov.io/gh/n0npax/sidecar_http_dispatcher)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/397fd620bb8845d4b70fc744d3fa9761)](https://app.codacy.com/manual/n0npax/sidecar_http_dispatcher?utm_source=github.com&utm_medium=referral&utm_content=n0npax/sidecar_http_dispatcher&utm_campaign=Badge_Grade_Settings)
 [![License](https://img.shields.io/:license-mit-blue.svg)](https://badges.mit-license.org)
-[![GitHub issues](https://img.shields.io/github/issues/Naereen/StrapDown.js.svg)](https://GitHub.com/n0npax/sidecar_http_dispatcher/issues/)
+[![GitHub issues](https://img.shields.io/github/issues/n0npax/sidecar_http_dispatcher.svg)](https://GitHub.com/n0npax/sidecar_http_dispatcher/issues/)
 ![GitHub go.mod Go version (subfolder of monorepo)](https://img.shields.io/github/go-mod/go-version/n0npax/sidecar_http_dispatcher?style=plastic)
 
 
