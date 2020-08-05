@@ -19,5 +19,6 @@ jobs:
           docker login --username ${USERNAME} -p ${{ secrets.DOCKER_TOKEN }}
           docker push ${IMAGE_NAME}:${VERSION}
           docker push ${IMAGE_NAME}:latest
+          docker login --username ${USERNAME} -p ${{ secrets.GH_PKG_TOKEN }} docker.pkg.github.com
           docker push ${GH_PREFIX}/${IMAGE_NAME}:${VERSION}
           docker push ${GH_PREFIX}/${IMAGE_NAME}:latest
