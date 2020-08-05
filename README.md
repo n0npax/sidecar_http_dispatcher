@@ -7,8 +7,6 @@
 [![License](https://img.shields.io/:license-mit-blue.svg)](https://badges.mit-license.org)
 [![GitHub issues](https://img.shields.io/github/issues/Naereen/StrapDown.js.svg)](https://GitHub.com/n0npax/sidecar_http_dispatcher/issues/)
 ![GitHub go.mod Go version (subfolder of monorepo)](https://img.shields.io/github/go-mod/go-version/n0npax/sidecar_http_dispatcher?style=plastic)
-[![Known Vulnerabilities](https://snyk.io/test/github/n0npax/sidecar_http_dispatcher/badge.svg)](https://snyk.io/test/github/n0npax/sidecar_http_dispatcher)
-
 
 
 ---
