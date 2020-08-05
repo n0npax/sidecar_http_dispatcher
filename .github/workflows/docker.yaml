@@ -12,8 +12,12 @@ jobs:
       - name: Docker image
         run: |
           USERNAME=n0npax
+          GH_PREFIX=docker.pkg.github.com
           VERSION=$(cat .version)
-          docker build . --tag ${USERNAME}/sidecar_http_dispatcher:${VERSION} --tag ${USERNAME}/sidecar_http_dispatcher:latest
+          IMAGE_NAME=${USERNAME}/sidecar_http_dispatcher
+          docker build . --tag ${IMAGE_NAME}:${VERSION} --tag ${IMAGE_NAME}:latest --tag ${GH_PREFIX}/${IMAGE_NAME}:${VERSION} --tag ${GH_PREFIX}/${IMAGE_NAME}:latest
           docker login --username ${USERNAME} -p ${{ secrets.DOCKER_TOKEN }}
-          docker push ${USERNAME}/sidecar_http_dispatcher:${VERSION}
-          docker push ${USERNAME}/sidecar_http_dispatcher:latest
+          docker push ${IMAGE_NAME}:${VERSION}
+          docker push ${IMAGE_NAME}:latest
+          docker push ${GH_PREFIX}/${IMAGE_NAME}:${VERSION}
+          docker push ${GH_PREFIX}/${IMAGE_NAME}:latest

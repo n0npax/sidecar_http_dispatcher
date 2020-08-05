@@ -23,9 +23,6 @@ test:
 	go tool cover -func=coverage.out
 	go tool cover -html=coverage.out
 
-.PHONY: hooks
-hooks:
-	pre-commit install
 
 .PHONY: build
 build:  clean test cover lint

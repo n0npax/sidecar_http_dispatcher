@@ -3,8 +3,10 @@ package dispatcher
 import (
 	"io/ioutil"
 	"log"
+	"net"
 	"net/http"
 	"net/url"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/n0npax/sidecar_http_dispatcher/pkg/config"
@@ -62,6 +64,7 @@ func dispatch(r *http.Request) (*http.Response, []byte, int) {
 
 func handleAndPass(c *gin.Context) {
 	r := c.Request
+	updateXFF(r)
 	resp, body, code := dispatch(r)
 
 	defer resp.Body.Close()
@@ -82,4 +85,14 @@ func Router() *gin.Engine {
 	r.Any("/*path", handleAndPass)
 
 	return r
+}
+
+func updateXFF(r *http.Request) {
+	if clientIP, _, err := net.SplitHostPort(r.RemoteAddr); err == nil {
+		if prior, ok := r.Header["X-Forwarded-For"]; ok {
+			clientIP = strings.Join(prior, ", ") + ", " + clientIP
+		}
+
+		r.Header.Set("X-Forwarded-For", clientIP)
+	}
 }
