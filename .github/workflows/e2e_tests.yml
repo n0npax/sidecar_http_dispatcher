@@ -7,10 +7,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: manusa/actions-setup-minikube@v1.0.2
+      - uses: manusa/actions-setup-minikube@v2.0.1
         with:
           minikube version: "v1.10.1"
           kubernetes version: "v1.18.2"
+          github token: ${{ secrets.GITHUB_TOKEN }}
       - name: Run e2e in k8s CI Cluster
         run: |
           MODE=ci ./example/deploy
